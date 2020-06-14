@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,700");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,400i,700");
+
+body {
+  font-family: Lato, sans-serif;
+}
+
+.heading {
+  font-family: Montserrat, sans-serif;
+}
+
+.header .subheading {
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: smaller;
+  color: #455A64;
+}
+
+
+.aside .heading {
+  margin: 0;
+  font-weight: 600;
+}
+
+.footer {
+  grid-column: 1 / 5;
+  background-color: #37474F;
+  padding: 0.7rem 1rem;
+  margin-top: 3rem;
+  text-align: right;
+}
+
+.footer .name-link {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.prose {
+
+max-width: 40rem;
+margin: 1.5rem auto;
+padding: 0 1rem;
+
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+/* 
+@media only screen and (max-width: 600px) {
+  .container {
+    grid-template-columns: 2rem 3fr 1fr 2rem;
+  }
+  .content {
+    grid-column: 2 / 4;
+  }
+  .aside {
+    grid-column: 2 / 4;
+  }
+} */
+
+
+
+</style>
+
+<body>
+
+{% if request.user_agent.is_pc %}
+<main class="container">
+        <header class="header">
+          <h1 class="heading center" style="padding-top: 100px; font-size: 38pt; font-weight: bolder;">{{ post.title }}</h1>
+        </header>
+        <section>
+          <img src="{% static post.image %}" alt='large-image' class="poster-image center" style="margin-bottom: 40px;">
+          <div class="prose" style="margin-bottom: 40px;">
+              By: {{post.author}}
+          </div>
+          {% include post.html %}
+        </section>
+      </main>
+{% endif %}
+{% if not request.user_agent.is_pc %}
+<main class="container">
+        <header class="header">
+          <h1 class="heading center" style="padding-top: 100px; font-size: 26pt; font-weight: bolder;">{{ post.title }}</h1>
+        </header>
+        <section>
+          <img src="{% static post.image %}" alt='large-image' class="poster-image center" style="margin-bottom: 40px;">
+          <div class="prose" style="margin-bottom: 40px;">
+                By: {{post.author}}
+          </div>
+          {% include post.html %}
+        </section>
+      </main>
+{% endif %}
+
+
+</body>
+
+
+{% endblock %}

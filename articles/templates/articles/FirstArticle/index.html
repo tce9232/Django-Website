@@ -1,0 +1,1217 @@
+{% load static %}
+<head>
+
+        <title>Oscars So White (Again)</title>
+      
+        <meta name="Description" content="A look at 92 years of Oscar biases">
+      
+        <meta charset="utf-8">
+
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+  <script src="https://code.jquery.com/jquery-1.7.0.min.js"></script>
+
+
+</head>
+
+<style>
+
+.enter {
+  fill: #EDCA3A;
+}
+
+.update {
+  fill: #1FBAD6;
+}
+
+.winner {
+  stroke: black;
+}
+
+.exit {
+  fill: #F25754;
+}
+
+.selected {
+  fill: #E6B0F1;
+}
+
+div.tooltip {
+  color: black;
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  font-family: Futura;
+  font: 12px sans-serif ;
+  background: #FCB8C3FF;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.center {
+  display:block ;
+  margin: auto;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+background-color: #eee;
+color: #444;
+cursor: pointer;
+padding: 18px;
+width: 100%;
+border: none;
+text-align: center;
+outline: none;
+font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+padding: 0 18px;
+display: none;
+overflow: hidden;
+background-color: #f1f1f1;
+}
+</style>
+
+<body>
+
+    <p class="prose">
+        The Academy Awards are entering their 92nd year when they return on Sunday, and after almost a century handing out one of the most prestigious awards 
+        in all of cinema, they're under fire again for under-representation in their five top categories. Four years after #OscarsSoWhite first began trending, 
+        all twenty acting nominees are white.
+        <br>
+        <br>
+        I wanted to give context for how extensive the discrimination is, so I dug into the data for every Oscar nominee and winner in the history of the award show.
+        What follows are timelines with dots on them corresponding to past Academy Award nominees. The dots on top of the timeline are all the non-white nominees and the dots below the timeline are all the white nominees.
+        A dot is highlighted yellow means it was the winner of that year. Feel free to hover over any of the dots to get more information about their role or the film in which they acted or directed.
+        <br>
+        <br>
+    </p>
+
+    <p class="prose" style="font-weight: bold; font-size: larger;">
+        Best Actor
+        </p>
+
+    <p class="prose">
+            First, we have the Best Actor category. As you can see in the chart, the first non-white nominee was actually a winner. Jose Ferrer won an Oscar for his performance in 
+            Cyrano de Bergerac. But there are large stretches, like the 1970s, where there are hardly any non-white nominees at all. And there are only four separate years with 
+            more than one non-white nominee at a time. 
+            <br>
+            <br>
+            I must note here that although my chart treats white/non-white as a binary, it is, of course, more complicated than that. Jose Ferrer and Ben Kingsley are relatively 
+            white-passing, while fellow Best Actor winners such as Sidney Poitier and Denzel Washington are not. This is yet another factor that we must keep in mind when considering 
+            how historically inclusive (or not) the Academy has been.  
+        </p>
+
+    <div id="actor" style="width: 100%; overflow-y: auto;"></div>
+    
+    <p class="prose" style="font-weight: bold; font-size: larger;">
+            Best Actress
+            </p>
+
+    <p class="prose">
+        Racial discrimination is even more apparent in the Best Actress category. Only 17 non-white actresses have ever been nominated for this award, and only one has ever won—Halle Berry 
+        for her performance in Monster's Ball. It's now been almost a decade since our last non-white nominee for Best Actress.
+        <br>
+        <br>
+        Although it's not a part of my analysis, <a href="https://www.bloomberg.com/graphics/2016-oscar-winners/" target="_blank" rel="noreferrer">studies</a> have shown that there are other physical traits that give an actress an advantage over her peers. 
+        Actresses with blue eyes have won almost twice as many awards as those with brown eyes, even though only one-sixth of Americans have blue eyes. 
+        <br>
+        <br>
+        I must also note here that although the term "actress" has fallen out of favor, I'll still be using it in this article as a way to distinguish between
+        gendered Oscar categories.
+    
+
+    </p>
+
+    <div id="actress" style="width: 100%; overflow-y: auto;"></div>
+
+    <p class="prose" style="font-weight: bold; font-size: larger;">
+            Best Supporting Actor
+            </p>
+
+    <p class="prose">
+        As you can see with this category, there are sometimes stretches where the nominations and awards seem almost proportionate, followed and preceded by stretches of almost zero recognition of actors of color.
+        The entire 1960s and 1970s were almost swept by white actors. Whereas, the 1980s to mid 2000s neared representation. But instead of continuing this trajectory, Barkhad Abdi in Captain Phillips is the 
+        only non-white supporting actor to be nominated since 2006.
+    </p>
+
+    <div id="sactor" style="width: 100%; overflow-y: auto;"></div>
+
+    <p class="prose" style="font-weight: bold; font-size: larger;">
+            Best Supporting Actress
+            </p>
+
+    <p class="prose">
+        This category sees a similar feast or famine phenomenon. From 1962 to 1989 there were only eight non-white nominees and no winners. But the 
+        Supporting Actress category also contains the best stretch for representation. From 2006 to 2013 this category had nine non-white nominations and four winners. 
+    </p>
+
+    <div id="sactress" style="width: 100%; overflow-y: auto;"></div>
+
+    <p class="prose" style="font-weight: bold; font-size: larger;">
+            Best Director
+            </p>
+
+    <p class="prose">
+        Acting isn't the only award that goes to a singular person. We also have the Best Director category, which has been given out since the beginning of the award show. 
+        Until the mid-2000s, this category looked the most bleak out of any of them, with only seven non-white nominees and no winners in almost 80 years of the award. But after Ang Lee became 
+        the first non-white director to win the award in 2005, there has been a stretch of six of the last seven Best Director awards going to non-white directors. Including the possibility of 
+        Bong Joon-ho extending that streak this year with a win (which in this writer's opinion, he strongly deserves).  
+    </p>
+
+    <div id="director" style="width: 100%; overflow-y: auto;"></div>
+
+    <p class="prose">
+        It seems like the directing category is the closest to being representative of any high profile award in the present moment. But something else that makes this category unique 
+        compared to the previous awards mentioned is that it's not gendered. Here I've broken down every Best Director award nomination from the beginning according to gender, and the  
+        results are striking. Only five total nominations for women since 1927, with only one win going to Kathryn Bigelow for The Hurt Locker in 2009 
+        (upsetting her ex-husband James Cameron and his movie Avatar in the process).
+    </p>
+
+    <div id="director2" style="width: 100%; overflow-y: auto;"></div>
+
+    <p class="prose" style="padding-bottom: 50px;">
+        It's not entirely clear how much of the blame for these biased nominations should fall on the Academy Awards. Of the top films from 2018, only 8% were directed by women.<sup><a href="https://www.hollywoodreporter.com/news/women-comprised-just-8-percent-directors-top-2018-films-1172727" target="_blank" rel="noreferrer">[1]</a></sup> 
+        And nearly three-quarters of all the characters in the top movies in 2014 were white. Only 17 of the top 100 films that year featured non-white lead or co-lead actors.<sup><a href="https://www.pbs.org/newshour/nation/30000-hollywood-film-characters-heres-many-werent-white" target="_blank" rel="noreferrer">[2]</a></sup>
+        It's obvious that the movie industy as a whole needs to do better in representing all races, genders and backgrounds. <br>
+        <br>
+        However, there's also a responsibility of the most major awards show in the United States to recognize actors or directors that DO make it on screen or behind the camera. The Oscars 
+        have a fundamental bias baked into it. The Academy itself is not fairly constructed. The group of people, from which the award show gets its name was found by the Los Angeles Times in 
+        2012 to be 94% Caucasian, 2% Black and less than 2% Latino. It also contains 77% men and 86% members older than 50.<sup><a href="https://www.latimes.com/entertainment/la-et-unmasking-oscar-academy-project-20120219-story.html" target="_blank" rel="noreferrer">[3]</a></sup> In other words, every single award given out by this Academy could 
+        be appropriately met with the "ok Boomer" meme. <br>
+        <br>
+        Four years ago, #OscarsSoWhite first began trending, and there was at least a gesture towards a movement by the Academy to help the voting process fairly represent everybody. Since then, there 
+        have been exactly zero non-white Best Actress, Supporting Actress or Supporting Actor nominees, with no non-white nominees in any acting category this year. It is obvious that the same biases 
+        that plagued the Oscars then are still present. And unless this online outrage turns into real dollars lost for them in terms of viewers and ad revenue, nothing will change any time soon. 
+        So when you're bored this Sunday night, and you're looking for something to do, instead of watching the Oscars for three hours to see a moment like <a href="https://www.independent.co.uk/arts-entertainment/films/news/nicole-kidman-clapping-gif-video-oscars-2017-reason-explanation-ceremony-audience-a7623081.html" target="_blank" rel="noreferrer">Nicole Kidmann clapping weirdly</a> or <a href="https://www.youtube.com/watch?v=GsSWj51uGnIEllen" target="_blank" rel="noreferrer">Ellen taking a selfie</a>, 
+        turn on Roma, watch Dolemite Is My Name, find something more entertaining to watch. It might be a small gesture, but I guarantee it'll also be more entertaining. 
+    </p>
+    <button type="button" class="collapsible">Click for Notes and Citations</button>
+      <div class="content">
+        <p class="prose">
+          <b>Notes:</b>
+          <br/>
+          <br/>
+          Assumptions about the ethnicity of an actor were made using the <a href="https://nndb.com/" target="_blank" rel="noreferrer">National Names Database</a>. This is 
+          not a perfect method, so if the reader finds something something that should be corrected, please <a href="mailto:teddavidcarlson@gmail.com" target="_blank" rel="noreferrer">notify me</a>. 
+          <br/>
+          <br/>
+          Inspiration for this analysis was taken from a <a href="https://labs.time.com/story/oscars-diversity/" target="_blank" rel="noreferrer">Time Magazine story</a> posted in 2016. 
+          <br/>
+          <br/>
+          <b>Citations:</b>
+          <br/>
+          <br/>
+          [1] Study: Women Film Directors Saw Their Numbers Shrink in 2018
+            Gregg Kilday - https://www.hollywoodreporter.com/news/women-comprised-just-8-percent-directors-top-2018-films-1172727
+          <br/>
+          <br/>
+            [2] Out Of 30,000 Hollywood Film Characters, Here's How Many Weren't White
+            Laura Santhanam-Megan Crigger - https://www.pbs.org/newshour/nation/30000-hollywood-film-characters-heres-many-werent-white
+          <br/>
+          <br/>
+            [3] From the Archives: Unmasking Oscar: Academy Voters Are Overwhelmingly White and Male
+            https://www.latimes.com/entertainment/la-et-unmasking-oscar-academy-project-20120219-story.html
+          </p>
+      </div>
+</body>
+
+
+
+
+<script>
+        {% if request.user_agent.is_pc %}
+        //SVG setup
+        var w = $(window).width();
+        if (w<900){
+            var w = 900
+        }
+        var r = w/240
+        var h = r*56
+        const margin = {top: 10, right: 50, bottom: 30, left: 50},
+        
+        
+              width = w - margin.left - margin.right,
+              height = h - margin.top - margin.bottom;
+
+        {% endif %}
+        {% if not request.user_agent.is_pc %}
+        var r = 5.5
+        const margin = {top: 10, right: 20, bottom: 30, left: 10},
+        
+        
+              width = 1150 - margin.left - margin.right,
+              height = 340 - margin.top - margin.bottom;
+
+        {% endif %}
+        
+        //x scales
+        const x = d3.scaleLinear()
+            .rangeRound([0, width])
+            .domain([1925, 2020]);
+        
+        //set up svg
+        const svg = d3.select("#actor")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                    `translate(${margin.left}, ${margin.top})`);
+        
+        const svg2 = d3.select("#actress")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                    `translate(${margin.left}, ${margin.top})`);
+
+        const svg3 = d3.select("#sactor")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                    `translate(${margin.left}, ${margin.top})`);
+
+        const svg4 = d3.select("#sactress")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                    `translate(${margin.left}, ${margin.top})`);
+
+        const svg5 = d3.select("#director")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                    `translate(${margin.left}, ${margin.top})`);
+
+        const svg6 = d3.select("#director2")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                    `translate(${margin.left}, ${margin.top})`);
+        
+        //tooltip
+        const tooltip = d3.select("body")
+          .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+        
+        const dataFile = "{% static 'articles/Data/actor.csv' %}"
+        const dataFile2 = "{% static 'articles/Data/actress.csv' %}"
+        const dataFile3 = "{% static 'articles/Data/sactor.csv' %}"
+        const dataFile4 = "{% static 'articles/Data/sactress.csv' %}"
+        const dataFile5 = "{% static 'articles/Data/director.csv' %}"
+        
+        
+        
+        //number of bins for histogram
+        const nbins = 120;
+        
+        //Note: data fetching is done each time the function is ran
+        //as d3.csv is replaced by tabletop.js request to get data each time
+        //from google spreadsheet
+        function update(){
+        
+          // Get the data
+          d3.csv(dataFile, function(error, allData) {
+            allData.forEach(function(d) {
+                d.Name = d.Name
+                d.Value = +d.Value
+                d.Race = d.Race;
+            });
+
+            //simulate new data by randomizing/slicing
+            let data = d3.shuffle(allData)
+            //histogram binning
+            const histogram = d3.histogram()
+              .domain(x.domain())
+              .thresholds(x.ticks(nbins))
+              .value(function(d) { return d.Value;} )
+        
+        
+            //binning data and filtering out empty bins
+            const bins = histogram(data).filter(d => d.length>0)
+        
+            //g container for each bin
+            let binContainer = svg.selectAll(".gBin")
+              .data(bins);
+        
+            binContainer.exit().remove()
+        
+            let binContainerEnter = binContainer.enter()
+            .append("g")
+              .attr("class", "gBin")
+              .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+        
+              
+            //need to populate the bin containers with data the first time
+            binContainerEnter.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: p.Index,
+                          name: p.Name,
+                          value: p.Value,
+                          race: p.Race,
+                          winner: p.Winner,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+              .enter()
+              .append("circle")
+                .attr("class", function(d) {
+                  if (d.winner == "Winner") {
+                      return "enter winner"; 
+                    }
+                    else {
+                      return "update"
+                    }
+                })
+                .attr("cx", 0) //g element already at correct x pos
+                .attr("cy", function(d) {
+                  if (d.race == "White")
+                  {
+                    return - d.idx * -2 * d.radius + d.radius + 13; 
+                  }
+                  else {
+                    return - d.idx * 2 * d.radius - d.radius;
+                  }
+                    })
+                
+                .attr("r", 0)
+                .on("mouseover", tooltipOn)
+                .on("mouseout", tooltipOff)
+                .transition()
+                  .duration(500)
+                  .attr("r", function(d) {
+                  return (d.length==0) ? 0 : d.radius; })
+            binContainerEnter.merge(binContainer)
+                .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+            //enter/update/exit for circles, inside each container
+            let dots = binContainer.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: i,
+                          name: p.Name,
+                          value: p.Value,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+        
+            
+          });//actor.csv
+
+
+          d3.csv(dataFile2, function(error, allData2) {
+            allData2.forEach(function(d) {
+                d.Name = d.Name
+                d.Value = +d.Value
+                d.Race = d.Race;
+            });
+
+            //simulate new data by randomizing/slicing
+            let data2 = d3.shuffle(allData2)
+            //histogram binning
+            const histogram = d3.histogram()
+              .domain(x.domain())
+              .thresholds(x.ticks(nbins))
+              .value(function(d) { return d.Value;} )
+        
+        
+            //binning data and filtering out empty bins
+            const bins = histogram(data2).filter(d => d.length>0)
+        
+            //g container for each bin
+            let binContainer = svg2.selectAll(".gBin")
+              .data(bins);
+        
+            binContainer.exit().remove()
+        
+            let binContainerEnter = binContainer.enter()
+            .append("g")
+              .attr("class", "gBin")
+              .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+        
+              
+            //need to populate the bin containers with data the first time
+            binContainerEnter.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: p.Index,
+                          name: p.Name,
+                          value: p.Value,
+                          race: p.Race,
+                          winner: p.Winner,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+              .enter()
+              .append("circle")
+                .attr("class", function(d) {
+                  if (d.winner == "Winner") {
+                      return "enter winner"; 
+                    }
+                    else {
+                      return "update"
+                    }
+                })
+                .attr("cx", 0) //g element already at correct x pos
+                .attr("cy", function(d) {
+                  if (d.race == "White")
+                  {
+                    return - d.idx * -2 * d.radius + d.radius + 13; 
+                  }
+                  else {
+                    return - d.idx * 2 * d.radius - d.radius;
+                  }
+                    })
+                
+                .attr("r", 0)
+                .on("mouseover", tooltipOn)
+                .on("mouseout", tooltipOff)
+                .transition()
+                  .duration(500)
+                  .attr("r", function(d) {
+                  return (d.length==0) ? 0 : d.radius; })
+            binContainerEnter.merge(binContainer)
+                .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+            //enter/update/exit for circles, inside each container
+            let dots = binContainer.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: i,
+                          name: p.Name,
+                          value: p.Value,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+        
+            
+          });//actress.csv
+
+          d3.csv(dataFile3, function(error, allData3) {
+            allData3.forEach(function(d) {
+                d.Name = d.Name
+                d.Value = +d.Value
+                d.Race = d.Race;
+            });
+
+            //simulate new data by randomizing/slicing
+            let data3 = d3.shuffle(allData3)
+            //histogram binning
+            const histogram = d3.histogram()
+              .domain(x.domain())
+              .thresholds(x.ticks(nbins))
+              .value(function(d) { return d.Value;} )
+        
+        
+            //binning data and filtering out empty bins
+            const bins = histogram(data3).filter(d => d.length>0)
+        
+            //g container for each bin
+            let binContainer = svg3.selectAll(".gBin")
+              .data(bins);
+        
+            binContainer.exit().remove()
+        
+            let binContainerEnter = binContainer.enter()
+            .append("g")
+              .attr("class", "gBin")
+              .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+            //need to populate the bin containers with data the first time
+            binContainerEnter.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: p.Index,
+                          name: p.Name,
+                          value: p.Value,
+                          race: p.Race,
+                          winner: p.Winner,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+              .enter()
+              .append("circle")
+                .attr("class", function(d) {
+                  if (d.winner == "Winner") {
+                      return "enter winner"; 
+                    }
+                    else {
+                      return "update"
+                    }
+                })
+                .attr("cx", 0) //g element already at correct x pos
+                .attr("cy", function(d) {
+                  if (d.race == "White")
+                  {
+                    return - d.idx * -2 * d.radius + d.radius + 13; 
+                  }
+                  else {
+                    return - d.idx * 2 * d.radius - d.radius;
+                  }
+                    })
+                
+                .attr("r", 0)
+                .on("mouseover", tooltipOn)
+                .on("mouseout", tooltipOff)
+                .transition()
+                  .duration(500)
+                  .attr("r", function(d) {
+                  return (d.length==0) ? 0 : d.radius; })
+            binContainerEnter.merge(binContainer)
+                .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+            //enter/update/exit for circles, inside each container
+            let dots = binContainer.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: i,
+                          name: p.Name,
+                          value: p.Value,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+        
+          });//sactor.csv
+
+          d3.csv(dataFile4, function(error, allData4) {
+            allData4.forEach(function(d) {
+                d.Name = d.Name
+                d.Value = +d.Value
+                d.Race = d.Race;
+            });
+
+            //simulate new data by randomizing/slicing
+            let data4 = d3.shuffle(allData4)
+            //histogram binning
+            const histogram = d3.histogram()
+              .domain(x.domain())
+              .thresholds(x.ticks(nbins))
+              .value(function(d) { return d.Value;} )
+        
+        
+            //binning data and filtering out empty bins
+            const bins = histogram(data4).filter(d => d.length>0)
+        
+            //g container for each bin
+            let binContainer = svg4.selectAll(".gBin")
+              .data(bins);
+        
+            binContainer.exit().remove()
+        
+            let binContainerEnter = binContainer.enter()
+            .append("g")
+              .attr("class", "gBin")
+              .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+        
+              
+            //need to populate the bin containers with data the first time
+            binContainerEnter.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: p.Index,
+                          name: p.Name,
+                          value: p.Value,
+                          race: p.Race,
+                          winner: p.Winner,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+              .enter()
+              .append("circle")
+                .attr("class", function(d) {
+                  if (d.winner == "Winner") {
+                      return "enter winner"; 
+                    }
+                    else {
+                      return "update"
+                    }
+                })
+                .attr("cx", 0) //g element already at correct x pos
+                .attr("cy", function(d) {
+                  if (d.race == "White")
+                  {
+                    return - d.idx * -2 * d.radius + d.radius + 13; 
+                  }
+                  else {
+                    return - d.idx * 2 * d.radius - d.radius;
+                  }
+                    })
+                
+                .attr("r", 0)
+                .on("mouseover", tooltipOn)
+                .on("mouseout", tooltipOff)
+                .transition()
+                  .duration(500)
+                  .attr("r", function(d) {
+                  return (d.length==0) ? 0 : d.radius; })
+            binContainerEnter.merge(binContainer)
+                .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+            //enter/update/exit for circles, inside each container
+            let dots = binContainer.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: i,
+                          name: p.Name,
+                          value: p.Value,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+        
+            
+          });//sactress.csv
+
+          d3.csv(dataFile5, function(error, allData5) {
+            allData5.forEach(function(d) {
+                d.Name = d.Name
+                d.Value = +d.Value
+                d.Race = d.Race;
+            });
+
+            //simulate new data by randomizing/slicing
+            let data5 = d3.shuffle(allData5)
+            //histogram binning
+            const histogram = d3.histogram()
+              .domain(x.domain())
+              .thresholds(x.ticks(nbins))
+              .value(function(d) { return d.Value;} )
+        
+        
+            //binning data and filtering out empty bins
+            const bins = histogram(data5).filter(d => d.length>0)
+        
+            //g container for each bin
+            let binContainer = svg5.selectAll(".gBin")
+              .data(bins);
+        
+            binContainer.exit().remove()
+        
+            let binContainerEnter = binContainer.enter()
+            .append("g")
+              .attr("class", "gBin")
+              .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+        
+              
+            //need to populate the bin containers with data the first time
+            binContainerEnter.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: p.Index,
+                          name: p.Name,
+                          value: p.Value,
+                          race: p.Race,
+                          winner: p.Winner,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+              .enter()
+              .append("circle")
+                .attr("class", function(d) {
+                  if (d.winner == "Winner") {
+                      return "enter winner"; 
+                    }
+                    else {
+                      return "update"
+                    }
+                })
+                .attr("cx", 0) //g element already at correct x pos
+                .attr("cy", function(d) {
+                  if (d.race == "White")
+                  {
+                    return - d.idx * -2 * d.radius + d.radius + 13; 
+                  }
+                  else {
+                    return - d.idx * 2 * d.radius - d.radius;
+                  }
+                    })
+                
+                .attr("r", 0)
+                .on("mouseover", tooltipOn)
+                .on("mouseout", tooltipOff)
+                .transition()
+                  .duration(500)
+                  .attr("r", function(d) {
+                  return (d.length==0) ? 0 : d.radius; })
+            binContainerEnter.merge(binContainer)
+                .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+            
+            //enter/update/exit for circles, inside each container
+            let dots = binContainer.selectAll("circle")
+                .data(d => d.map((p, i) => {
+                  return {idx: i,
+                          name: p.Name,
+                          value: p.Value,
+                          role: p.Role,
+                          film: p.Film,
+                          radius: r
+                        }
+                }))
+        
+            
+          });//director.csv
+
+
+
+          d3.csv(dataFile5, function(error, allData6) {
+    allData6.forEach(function(d) {
+        d.Name = d.Name
+        d.Value = +d.Value
+        d.Race = d.Race
+        d.Gender = d.Gender;
+    });
+    
+    //simulate new data by randomizing/slicing
+    let data6 = d3.shuffle(allData6)
+    //histogram binning
+    const histogram = d3.histogram()
+      .domain(x.domain())
+      .thresholds(x.ticks(nbins))
+      .value(function(d) { return d.Value;} )
+
+    //binning data and filtering out empty bins
+    const bins = histogram(data6).filter(d => d.length>0)
+
+    //g container for each bin
+    let binContainer = svg6.selectAll(".gBin")
+      .data(bins);
+
+    binContainer.exit().remove()
+
+    let binContainerEnter = binContainer.enter()
+    .append("g")
+      .attr("class", "gBin")
+      .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+    
+
+      
+    //need to populate the bin containers with data the first time
+    binContainerEnter.selectAll("circle")
+        .data(d => d.map((p, i) => {
+          return {idx: p.Index,
+                  name: p.Name,
+                  value: p.Value,
+                  race: p.Race,
+                  winner: p.Winner,
+                  role: p.Role,
+                  film: p.Film,
+                  gender: p.Gender,
+                  radius: r
+                }
+        }))
+      .enter()
+      .append("circle")
+        .attr("class", function(d) {
+          if (d.winner == "Winner") {
+              return "enter winner"; 
+            }
+            else {
+              return "update"
+            }
+        })
+        .attr("cx", 0) //g element already at correct x pos
+        .attr("cy", function(d) {
+          if (d.gender == "Male")
+          {
+            return - d.idx * -2 * d.radius + d.radius + 13; 
+          }
+          else {
+            return - d.idx * 2 * d.radius - d.radius;
+          }
+            })
+        
+        .attr("r", 0)
+        .on("mouseover", tooltipOn)
+        .on("mouseout", tooltipOff)
+        .transition()
+          .duration(500)
+          .attr("r", function(d) {
+          return (d.length==0) ? 0 : d.radius; })
+    binContainerEnter.merge(binContainer)
+        .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+    
+    //enter/update/exit for circles, inside each container
+    let dots = binContainer.selectAll("circle")
+        .data(d => d.map((p, i) => {
+          return {idx: i,
+                  name: p.Name,
+                  value: p.Value,
+                  role: p.Role,
+                  film: p.Film,
+                  radius: r
+                }
+        }))
+
+    
+  });//d3.csv
+          
+        };//update
+        
+        function tooltipOn(d) {
+          //x position of parent g element
+          let gParent = d3.select(this.parentElement)
+          let translateValue = gParent.attr("transform")
+        
+          
+        
+          d3.select(this)
+            .classed("selected", true)
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", .9);
+          tooltip.html(d.name + "<br/> (" + d.value + ")" + "<br/> Role: " + d.role + "<br/>Film: " + d.film)
+                .style("left", (d3.event.pageX + 10) + "px")		
+                .style("top", (d3.event.pageY - 80) + "px");
+        }//tooltipOn
+        
+        function tooltipOff(d) {
+          d3.select(this)
+              .classed("selected", false);
+            tooltip.transition()
+                 .duration(500)
+                 .style("opacity", 0);
+        }//tooltipOff
+        
+        // add x axis
+        svg.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height/2 + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+        
+        svg2.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height/2 + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+        svg3.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height/2 + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+        
+        svg4.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height/2 + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+        svg5.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height/2 + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+        
+        svg6.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height/2 + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+        
+        
+        //draw everything
+        update();
+        
+        svg.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Non-White Actors");
+        
+        svg2.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Non-White Actresses");
+        
+        svg.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (height + margin.top - 20) + ")")
+              .style("text-anchor", "middle")
+              .text("White Actors");
+        
+        svg2.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (height + margin.top - 20) + ")")
+              .style("text-anchor", "middle")
+              .text("White Actresses");
+
+        svg3.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Non-White Supporting Actors");
+        
+        svg4.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Non-White Supporting Actresses");
+        
+        svg3.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (height + margin.top - 20) + ")")
+              .style("text-anchor", "middle")
+              .text("White Supporting Actors");
+        
+        svg4.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (height + margin.top - 20) + ")")
+              .style("text-anchor", "middle")
+              .text("White Supporting Actresses");
+
+        svg5.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Non-White Directors");
+        
+        svg5.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (height + margin.top - 20) + ")")
+              .style("text-anchor", "middle")
+              .text("White Directors");
+        
+        svg6.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Female Directors");
+        
+        svg6.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                   (height + margin.top - 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Male Directors");
+        
+        var rectangle = svg.append("rect")
+                            .attr("fill", "black")
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .12);
+        
+        var rectangle = svg.append("rect")
+                            .attr("fill", "black")
+                            .attr("y", height/2)
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .06);
+        
+        var rectangle = svg2.append("rect")
+                            .attr("fill", "black")
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .12);
+        
+        var rectangle = svg2.append("rect")
+                            .attr("fill", "black")
+                            .attr("y", height/2)
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .06);
+                        
+        var rectangle = svg3.append("rect")
+                            .attr("fill", "black")
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .12);
+        
+        var rectangle = svg3.append("rect")
+                            .attr("fill", "black")
+                            .attr("y", height/2)
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .06);
+        
+        var rectangle = svg4.append("rect")
+                            .attr("fill", "black")
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .12);
+        
+        var rectangle = svg4.append("rect")
+                            .attr("fill", "black")
+                            .attr("y", height/2)
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .06);
+
+        var rectangle = svg5.append("rect")
+                            .attr("fill", "black")
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .12);
+        
+        var rectangle = svg5.append("rect")
+                            .attr("fill", "black")
+                            .attr("y", height/2)
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .06);
+
+        var rectangle = svg6.append("rect")
+                            .attr("fill", "red")
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .08);
+        
+        var rectangle = svg6.append("rect")
+                            .attr("fill", "blue")
+                            .attr("y", height/2)
+                            .attr("width", width+20)
+                            .attr("height", height/2)
+                            .attr("opacity", .06);
+        
+        // add legend
+        
+        var ordinal = d3.scaleOrdinal()
+          .domain(["Winner", "Nominee"])
+          .range([ "#EDCA3A", "#1FBAD6"]);
+        
+        var legend = d3.select("svg");
+        
+        var legend2 = d3.select("svg2");
+
+        var legend3 = d3.select("svg3");
+
+        var legend4 = d3.select("svg4");
+
+        var legend5 = d3.select("svg5");
+
+        var legend6 = d3.select("svg6");
+
+        {% if request.user_agent.is_pc %}
+        legend.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(70,30)");
+        
+        legend2.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+
+        legend3.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+        
+        legend4.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+
+        legend5.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+        
+        legend6.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+        {% endif %}
+        {% if not request.user_agent.is_pc %}
+        legend.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(20,30)");
+        
+        legend2.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+
+        legend3.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+        
+        legend4.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+
+        legend5.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+        
+        legend6.append("g")
+          .attr("class", "legendOrdinal winner")
+          .attr("transform", "translate(50,30)");
+        {% endif %}
+        
+        
+        
+        
+        var legendOrdinal = d3.legendColor()
+          .shape("path", d3.symbol().type(d3.symbolCircle).size(100)())
+          .shapePadding(10)
+          .scale(ordinal);
+        
+        legend.select(".legendOrdinal")
+          .call(legendOrdinal);
+        
+        legend2.select(".legendOrdinal")
+          .call(legendOrdinal);
+        
+        legend3.select(".legendOrdinal")
+          .call(legendOrdinal);
+
+        legend4.select(".legendOrdinal")
+          .call(legendOrdinal);
+
+        legend5.select(".legendOrdinal")
+          .call(legendOrdinal);
+
+        legend6.select(".legendOrdinal")
+          .call(legendOrdinal);
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+        });
+    }
+        
+        </script>

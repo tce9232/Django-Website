@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+</style>
+<body>
+
+<!-- First Grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+    <div class="w3-content">
+      <div>
+          <h1>Mission Statement</h1>
+          <div class="w3-content">
+              <p><em>The Data Collective</em> is a collection of data-driven articles written by professionals in data science or related fields. People in these fields tend to run incredibly insightful analyses and 
+                are highly motivated to shed light on complex issues, but most of this time and energy usually ends up going towards improving the bottom line of a tech giant or consulting firm. This blog aims to become 
+                an outlet for data scientists and others to analyze and post about topics in which they're independently passionate. 
+              <p><em>The Data Collective</em> is entirely funded by donations from our readers. All of <i>The Data Collective</i>’s editorial decisions and judgments are made independently and not on the basis of donor support.</p>
+              <p>The opinions and views expressed in <em>The Data Collective</em> are those of the authors and not of any entities for which they work or any schools they attend.</p>
+          </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// Used to toggle the menu on small screens when clicking on the menu button
+function myFunction() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+</script>
+
+</body>
+</html>
+
+{% endblock %}

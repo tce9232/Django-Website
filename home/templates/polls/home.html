@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<head>
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <title>The Data Collective</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157449578-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-157449578-1');
+    </script>
+
+
+</head>
+
+
+
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-plus,.fa-bullhorn {font-size:200px}
+body {
+    font: 14.46154px Ashbury,georgia,serif;
+    background-color: #fdfdfd;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.head_text {
+    color: white;
+}
+
+.card {
+    box-shadow: 0 14px 48px #E3E7EB;
+}
+.tz-home-trio__overline {
+    font-family: Moderat,arial,sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: .01em;
+    text-transform: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #C7090D;
+    margin: 0 0 15px;
+}
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+.tz-home-trio__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.tz-home-trio__authors {
+    margin: 2px 0 0;
+    font-family: Ashbury,georgia,serif;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 400;
+    text-transform: none;
+    font-style: italic;
+    color: #000;
+    text-align: center;
+}
+
+.tz-home-trio__list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+.tz-home-trio {
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-style: solid;
+    border-color: #000;
+    border-width: 0 0 5px;
+}
+.tz-home-primary--standardImage:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 10px;
+    background: url(https://e360.yale.edu/assets/img/rule-wavy-wide.svg) no-repeat 50% bottom;
+    background-size: 1430px 10px;
+}
+.tz-home-trio__dek {
+    text-align: center;
+    font-family: Ashbury,georgia,serif;
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: none;
+}
+.tz-home-trio__item {
+    width: 31.91489%;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.tz-home-trio__title-link {
+    font-family: Ashbury,georgia,serif;
+    font-size: 25px;
+    line-height: 1.2;
+    font-weight: 400;
+    text-transform: none;
+    color: #000;
+    text-align: center;
+    display: block;
+}
+.btn-1 {
+  border: 2px solid #000;
+}
+.btn-1:hover {
+  background: #000;
+  color: #fff;
+}
+.btn-1:active {
+  top: 2px;
+}
+.custom-btn {
+  padding: 10px 25px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  background: transparent;
+  outline: none !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+</style>
+<body>
+
+<!-- Header -->
+{% for post in post_list|slice:"0:1" %}
+    {% if request.user_agent.is_pc %}
+<div class="w3-row-padding w3-padding-64 w3-container tz-home-primary--standardImage__text">
+    <div class="w3-content">
+    <figure class="tz-home-primary--standardImage__image w3-twothird">
+    <a href="{% url 'articles:article' pk=post.pk %}" >
+    <div>
+      <img src="{% static post.image %}" style="max-width: 100%;">
+    </div>
+    </a>
+
+    </figure>
+    {% endif %}
+    {% if not request.user_agent.is_pc %}
+<div class="w3-row-padding w3-padding-32 w3-container tz-home-primary--standardImage__text">
+    <div class="w3-content">
+    <figure class="tz-home-primary--standardImage__image w3-twothird"  style="padding-top: 64px;>
+        <a href="{% url 'articles:article' pk=post.pk %}" >
+        <div>
+          <img src="{% static post.image %}" style="max-width: 100%; width: 80%;" >
+        </div>
+        </a>
+    
+        </figure>
+    {% endif %}
+  <div class="tz-home-primary--standardImage__text">
+    <div class="tz-home-primary--standardImage__titles">
+          <h3 class="tz-home-trio__overline" style="padding-top: 50px;">{{ post.category }}</h3>
+      <h2>
+        <a class="tz-home-trio__title-link" href="{% url 'articles:article' pk=post.pk %}">{{ post.title }}</a>
+      </h2></div>
+        <div class="tz-home-primary--standardImage__dek tz-home-trio__dek">
+        <p>{{ post.body }} </p>
+      
+
+            <p>
+                By <a class="tz-home-primary--standardImage__author-link" href="/contributors/">{{ post.author }}</a>
+              </p><!-- authors -->
+      
+    </div>
+    {% endfor %}
+  </div> <!-- text --><img src="https://e360.yale.edu/assets/img/rule-wavy-wide.svg">
+</div>
+
+</div>
+
+<div class="tz-home-primary--standardImage__text"></div>
+
+{% if request.user_agent.is_pc %}
+  <div class="w3-content">
+    
+    <ul class="tz-home-trio__list" style="padding-bottom: 40px;">
+    
+      {% for post in post_list|slice:"1:4" %}
+        <li class="tz-home-trio__item">
+      <h3 class="tz-home-trio__overline">{{ post.category }}</h3>
+      <figure class="tz-home-primary--standardImage__image w3-twothird" style="width: auto">
+          <a href="{% url 'articles:article' pk=post.pk %}" >
+          <div>
+            <img src="{% static post.image %}" style="max-width: 100%;">
+          </div>
+          </a>
+          </figure>
+      <h2 class="tz-home-trio__title">
+        <a class="tz-home-trio__title-link" href="{% url 'articles:article' pk=post.pk %}">{{ post.title }}</a>
+      </h2>
+    
+              <div class="tz-home-trio__dek">
+        <p>{{ post.body }}</p>
+      </div>
+              <p class="tz-home-trio__authors">
+                  By <a class="tz-home-trio__author-link" href="/contributors/">{{ post.author }}</a>
+                </p>
+    </li>
+    
+    {% endfor %}
+    
+    </li>
+      </ul>
+      <div style="text-align: right;">
+        <a href="{% url 'articles:archive' %}">
+            <button class="custom-btn btn-1">Full Archive</button>
+        </a>
+        
+      </div>
+      
+      <img src="https://e360.yale.edu/assets/img/rule-wavy-wide.svg">
+    </div>
+{% endif %}
+
+{% if not request.user_agent.is_pc %}
+  <div class="w3-content">
+      <h1 style="text-align: center; color: #C7090D; font-weight: bold;">Archives</h1>
+      {% for post in post_list|slice:"1:3" %}
+      <figure class="tz-home-primary--standardImage__image w3-twothird" style="width: auto">
+          <a href="{% url 'articles:article' pk=post.pk %}" >
+          <div>
+            <img src="{% static post.image %}" style="max-width: 100%;">
+          </div>
+          </a>  
+      
+          </figure>
+      <h3 class="tz-home-trio__overline">{{ post.category }}</h3>
+    
+      <h2 class="tz-home-trio__title">
+        <a class="tz-home-trio__title-link" href="{% url 'articles:article' pk=post.pk %}">{{ post.title }}</a>
+      </h2>
+    
+              <div class="tz-home-trio__dek">
+        <p>{{ post.body }}</p>
+      </div>
+              <p class="tz-home-trio__authors" style="padding-bottom: 40px;">
+                  By <a class="tz-home-trio__author-link" href="/contributors/">{{ post.author }}</a>
+                </p>
+    
+    {% endfor %}
+    
+      <div style="text-align: right;">
+        <a href="{% url 'articles:archive' %}">
+            <button class="custom-btn btn-1">Full Archive</button>
+        </a>
+        
+      </div>
+      
+      <img src="https://e360.yale.edu/assets/img/rule-wavy-wide.svg">
+    </div>
+{% endif %}
+
+
+<!-- First Grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-twothird">
+        <h1>Mission Statement</h1>
+        <div class="w3-content">
+          <p><em>The Data Collective</em> is a collection of data-driven articles written by professionals in data science or related fields. People in these fields tend to run incredibly insightful analyses and 
+            are highly motivated to shed light on complex issues, but most of this time and energy usually ends up going towards improving the bottom line of a tech giant or consulting firm. This blog aims to become 
+            an outlet for data scientists and others to analyze and post about topics in which they're independently passionate. 
+          <p><em>The Data Collective</em> is entirely funded by donations from our readers. All of <i>The Data Collective</i>’s editorial decisions and judgments are made independently and not on the basis of donor support.</p>
+          <p>The opinions and views expressed in <em>The Data Collective</em> are those of the authors and not of any entities for which they work or any schools they attend.</p>
+        </div>
+    </div>
+
+    {% if request.user_agent.is_pc %}
+    <div class="w3-third w3-center">
+      <i class="fa fa-plus w3-padding-64 w3-text-red"></i>
+    </div>
+  </div>
+    {% endif %}
+</div>
+<img src="https://e360.yale.edu/assets/img/rule-wavy-wide.svg">
+
+<!-- Second Grid -->
+<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+  <div class="w3-content">
+    {% if request.user_agent.is_pc %}
+    <div class="w3-third w3-center">
+      <i class="fa fa-bullhorn w3-padding-64 w3-text-red w3-margin-right"></i>
+    </div>
+    {% endif %}
+
+    <div class="w3-twothird">
+      <h1>Contact Us</h1>
+      <div class="w3-content">
+          <p><em>Editor:</em> Ted Carlson<br><br><br><em>Email us at:</em><br><p><a href="mailto:TheDataCollectiveBlog@gmail.com">TheDataCollectiveBlog@gmail.com</a></p> 
+          <p>It’s easy to keep up with our latest articles by following us on social media. You can follow our <a href="http://facebook.com" target="_blank" rel="noreferrer noopener">Facebook</a> or <a href="https://twitter.com/DataC0llective" target="_blank" rel="noreferrer noopener">Twitter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
+    <h1 class="w3-margin w3-xlarge">[Future Donate Button]</h1>
+</div>
+
+<script>
+// Used to toggle the menu on small screens when clicking on the menu button
+function myFunction() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+</script>
+
+</body>
+
+</html>
+
+{% endblock %}

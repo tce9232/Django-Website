@@ -1,0 +1,3390 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Student Loans</title>
+
+  <meta name="Description" content="A data-driven analysis of the student debt crisis in America.">
+
+  <meta charset="utf-8">
+
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://unpkg.com/scrollama"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js" defer></script>
+  <meta name="viewport" content="initial-scale=1.0" />
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://unpkg.com/jeezy@1.11.2/lib/jeezy.min.js"></script>
+  <script src="https://kit.fontawesome.com/3702056331.js"></script>
+  <script src="//d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.7.0.min.js"></script>
+
+  <!-- <link rel="stylesheet" href="{% static 'articles/style.css' %}"> -->
+  
+
+</head>
+
+<style>
+
+*{
+
+margin:0;
+padding:0;
+
+}
+
+
+html, body{
+
+height: 100%;
+padding: 10;
+scroll-behavior: smooth;
+background: #ffffff;
+color: rgb(0, 0, 0);
+font-weight: 500;
+font-size: 18px;
+font-family: Georgia, 'Times New Roman', Times, serif;
+
+}
+
+svg{
+
+padding: 20px;
+position: sticky;
+top: 0;
+
+}
+
+text{
+
+font-size: 12px;
+position: center;
+
+}
+
+path {
+opacity: 1;
+fill: none;
+stroke-width: 1px;
+stroke-dasharray: 1600;
+
+}
+
+.path-tuition {
+opacity: 1;
+}
+
+.path-animate {
+
+fill: none;
+stroke-dasharray: 1600;
+animation: dash 2s linear 1;
+stroke-width: 2;
+
+}
+
+@-webkit-keyframes dash {
+
+  from {
+    stroke-dashoffset: 1600;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.axis path, .axis line {
+
+fill: none;
+stroke: grey;
+stroke-width: 1;
+shape-rendering: crispEdges;
+
+}
+
+h3 {
+  text-align: center;
+  max-width: 800px;
+  margin: auto;
+  margin-bottom: 20px;
+  margin-top: 50px;
+}
+
+.prose {
+
+max-width: 40rem;
+margin: 1.5rem auto;
+padding: 0 1rem;
+
+}
+
+.title {
+
+max-width: 60rem;
+margin: 0 auto 1rem auto;
+padding-top: 0;
+font-weight: 700;
+text-align: center;
+font-size: 60px;
+line-height: 1.5;
+color: #3b3b3b;
+
+}
+
+.subtitle {
+
+font-weight: 400;
+max-width: 60rem;
+margin: 0 auto 1rem auto;
+text-align: center;
+color: #6e6e6e;
+font-size: 24px;
+
+}
+
+.warning {
+
+font-weight: 400;
+max-width: 60rem;
+margin: 0 auto 1rem auto;
+text-align: center;
+color: red;
+font-size: 24px;
+
+}
+
+.byline {
+
+max-width: 40rem;
+margin: 0 auto;
+padding-top: 2rem;
+padding-bottom: 1.5rem;
+text-align: center;
+font-size: 14px;
+line-height: 1.5;
+
+}
+
+.debt_container {
+
+position: sticky;
+top: 25%;
+bottom: auto;
+transform: translate3d(0,0,0);
+
+}
+
+.picture_is_visible {
+
+opacity: 1;
+transition: .3s;
+max-width: 300px;
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 50%;
+position: absolute
+
+}
+
+.picture_is_not_visible {
+
+opacity: 0;
+transition: .3s;
+max-width: 300px;
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 50%;
+position: absolute;
+
+}
+
+.node circle {
+stroke: #3a403d;
+stroke-width: .5px;
+}
+
+.scroll-text {
+
+position: relative;
+max-width: 30rem;
+margin: 0 auto;
+padding: 1rem;
+z-index: 1;
+
+}
+
+.step {
+
+}
+
+.hidden-step {
+
+opacity: 0;
+
+}
+
+.step:last-child {
+
+margin-bottom: 0;
+
+}
+
+.step.boxed p {
+
+text-align: center;
+padding: 1rem;
+font-size: 1.5rem;
+background-color: #fff;
+border: 1px solid #c9c9c9;
+-webkit-box-shadow: 0 1rem 2rem rgba(201,201,201,.3);
+box-shadow: 0 1rem 2rem rgba(201,201,201,.3);
+padding: 2rem 1rem;
+text-shadow: 0 0 black;
+box-shadow: 0 0 5px black;
+
+}
+
+.step p {
+
+margin-bottom: 150px;
+font-family: "TiemposTextWeb-Regular","Georgia";
+font-size: 16px;
+line-height: 23px;
+color: #767678;
+}
+
+#scrolly {
+
+position: relative;
+background-color: #ffffff;
+padding: 1rem;
+
+}
+
+#emojiscrolly {
+
+position: relative;
+background-color: #ffffff;
+padding: 1rem;
+
+}
+
+#firstscrolly {
+
+position: relative;
+background-color: #ffffff;
+
+}
+
+#scrollyleft {
+
+position: relative;
+background-color: #ffffff;
+padding: 1rem;
+display: flex;
+
+}
+
+#bubblescrolly {
+
+position: relative;
+background-color: #ffffff;
+padding: 1rem;
+display: flex;
+
+}
+
+#hatscrolly {
+
+position: relative;
+background-color: #ffffff;
+padding: 1rem;
+display: flex;
+
+}
+
+div.tooltip {	
+position: absolute;			
+text-align: left;			
+width: 200px;					
+height: 150px;					
+padding: 2px;				
+font: 12px sans-serif;		
+background: lightsteelblue;	
+border: 0px;		
+border-radius: 8px;			
+pointer-events: none;			
+}
+
+article {
+
+position: relative;
+padding: 0 1rem;
+max-width: 20rem;
+
+}
+
+.centerpositioned {
+
+position: relative;
+padding: 0 1rem;
+max-width: 20rem;
+margin: 0 auto;
+
+}
+
+figure {
+
+position: sticky;
+left: 0;
+width: 100%;
+margin: 0;
+-webkit-transform: translate3d(0, 0, 0);
+-moz-transform: translate3d(0, 0, 0);
+transform: translate3d(0, 0, 0);
+
+}
+
+figure p {
+
+text-align: center;
+padding: 1rem;
+position: absolute;
+top: 50%;
+left: 50%;
+-moz-transform: translate(-50%, -50%);
+-webkit-transform: translate(-50%, -50%);
+transform: translate(-50%, -50%);
+font-size: 8rem;
+font-weight: 900;
+color: #fff;
+
+}
+
+/*
+Plugin: jQuery Parallax
+Version 1.1.3
+Author: Ian Lunn
+Twitter: @IanLunn
+Author URL: https://www.ianlunn.co.uk/
+Plugin URL: https://www.ianlunn.co.uk/plugins/jquery-parallax/
+
+License: http://creativecommons.org/licenses/by-sa/3.0/ (Attribution Share Alike). Please attribute work to Ian Lunn simply by leaving these comments in the source code or if you'd prefer, place a link on your website to https://www.ianlunn.co.uk/.
+*/
+
+@charset "utf-8";
+
+/* CSS Document */
+
+p{
+
+  margin: 0 0 20px 0;	
+
+}
+
+p, ul{
+
+  margin-bottom: 150px;
+font-family: "TiemposTextWeb-Regular","Georgia";
+font-size: 16px;
+line-height: 23px;
+color: #767678;
+
+}
+
+.float-left{
+
+  float: left;	
+  margin: 0 0 0 20px;
+
+}
+
+.float-right{
+
+  float: right;
+  margin: 0 20px 0 0;
+
+}
+
+.center{
+
+  font-size: 2.5em;
+  padding: 80px 0 0 0;
+  text-align: center;
+
+}
+
+#nav{
+
+  list-style: none;
+  position: fixed;
+  right: 20px;
+
+}
+
+#nav li{
+
+  margin: 0 0 15px 0;	
+
+}
+
+#intro{
+
+  background:url({% static 'articles/classroom.webp' %}) 50% 0 no-repeat fixed;
+  color: white;
+  height: 1500px;
+  margin: 0 auto;
+  padding: 0;
+background-size: cover;
+
+}
+
+#second{
+
+  background: url({% static 'articles/grads.webp' %}) 50% 0 no-repeat fixed;
+  color: white;
+  height: 1800px;
+  margin: 0 auto;
+  overflow: hidden;
+background-size: cover;
+
+}
+
+#third{
+
+  background: url({% static 'articles/woman.webp' %}) 50% 0 no-repeat fixed;
+  color: white;
+  height: 200VH;
+  padding: 100px 0 0 0;	
+background-size: cover;
+
+}
+
+#fourth{
+
+background: url({% static 'articles/women.webp' %}) 50% 0 no-repeat fixed;
+color: white;
+height: 250VH;
+padding: 100px 0 0 0;	
+background-size: cover;
+
+}
+
+#mountain{
+
+  background: {% static 'articles/MoneyMountain.webp' %} 50% 0 no-repeat fixed;
+  color: white;
+  height: 650px;
+  padding: 100px 0 0 0;	
+
+}
+
+.story{
+
+  margin: 0 auto;
+  min-width: 980px;
+  overflow: auto;
+  width: 980px;
+
+}
+
+.story .float-left, .story .float-right{
+
+  padding: 100px 0 0 0;
+  position: relative;
+  width: 350px;	
+
+}
+
+.quote {
+
+position: center;
+display: block;
+left: 50%;
+top: 100px;
+margin-top: 400px;
+margin-left: 0px;
+margin-bottom: 300px;
+background: transparent;
+
+}
+
+img.article {
+
+display: block;
+object-fit: cover;
+position: sticky;
+top: 0;
+border: 0;
+width: 100%;
+margin-left: auto;
+margin-right: auto;
+
+}
+
+.path-hat {
+stroke-dasharray: 1000;
+animation: draw 5s;
+}
+
+
+@keyframes draw {
+from {
+  stroke-dashoffset: 2000
+}
+to {
+  stroke-dashoffset: 0;
+}
+}
+
+.select-items {
+position: absolute;
+background-color: DodgerBlue;
+top: 100%;
+left: 0;
+right: 0;
+z-index: 99;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+background-color: #eee;
+color: #444;
+cursor: pointer;
+padding: 18px;
+width: 100%;
+border: none;
+text-align: center;
+outline: none;
+font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+padding: 0 18px;
+display: none;
+overflow: hidden;
+background-color: #f1f1f1;
+}
+
+
+</style>
+
+
+<body>
+
+    <div class="intro">
+        <img class="article" alt="title image" src="{% static 'articles/title.webp' %}" style="width: 50%; margin-bottom: 30px; top:unset">
+      <p class="subtitle">
+        It's Payback Time
+      </p>
+      <p class="byline">
+        by: Ted Carlson
+      </p>
+      <section>
+        
+      </section>
+
+      <p class="warning" id="demo" text-align= "center" font-size= "48px" font-weight= "1500";></p>
+      <button type="button" class="collapsible">Click for Project Description and Usage Instructions</button>
+      <div class="content">
+        <p class="prose">
+          <b>Navigating this Article:</b>
+          <br/>
+          <br/>
+          This article is currently only supported in desktop browsers using Google Chrome. If you’re currently reading this another way, please 
+          switch to Chrome on desktop or your reading experience will be compromised. 
+          <br/>
+          <br/>
+          Based on the size of the dynamic data visuals in this project, scrolling too fast through this article will not play well with all graphs. 
+          Scrolling back up through this project is also not fully supported, so if you want to rewatch a visualization, you may need to do some 
+          combination of scrolling up or reloading the page. 
+          <br/>
+          <br/>
+          Setting your page zoom to 100% should work to show all features in this article, but if you find at any point that images are getting 
+          cut off, zooming out a step should work.
+          <br/>
+          <br/>
+          <b>About the Project: </b>
+          <br/>
+          <br/>
+          This article aims to illustrate the extent of the student loan crisis through both written word and dynamic data visualizations. 
+          It was inspired by similar work that has been done at <a href="https://pudding.cool/2019/04/vogue/" target="_blank" rel="noreferrer">The Pudding</a>, <a href="https://www.bloomberg.com/graphics/2015-auto-sales/" target="_blank" rel="noreferrer">Bloomberg</a>, <a href="https://www.nytimes.com/section/upshot" target="_blank" rel="noreferrer">The Upshot</a>, and <a href="https://www.theguardian.com/us-news/ng-interactive/2015/oct/19/homan-square-chicago-police-detainees" target="_blank" rel="noreferrer">The Guardian</a>. 
+          <br/>
+          <br/>
+          In order to best integrate my article with the data visualizations, <a href="https://github.com/russellgoldenberg/scrollama" target="_blank" rel="noreferrer">Scrollama</a>, a JavaScript library developed by Russell Goldenberg 
+          at The Pudding, was used. It uses IntersectionObserver instead of scroll events to trigger scroll-based interactives, and was by 
+          far the simplest and best performing library I tested to make my article interactive. You can check out basic examples of this library 
+          at the GitHub repository linked above. 
+          <br/>
+          <br/>
+          <b>Article Contents:</b>
+          <br/>
+          <br/>
+          <b>This article is broken down into five major sections:</b><br/>
+          <b>1.</b>  An introduction to the history of student loans with a line graph of school tuition and government grant spending.<br/>
+          <b>2.</b>  Problem diagnoses with a line graph of credit default rates over time.<br/>
+          <b>3.</b>  Student debt symptoms illustrated with emojis.<br/>
+          <b>4.</b>  A cluster analysis of student debt attributes for each college in the U.S.<br/>
+          <b>5.</b> Summary and wrap-up.
+          <br/>
+          <br/>
+          The animated line graphs in section 1 and 2 were created using D3. The <a href="https://css-tricks.com/svg-line-animation-works/" target="_blank" rel="noreferrer">illusion of drawing the line</a> is created by making the lines 
+          “dashed”, but having the dash extend over the length of the entire line, making it completely hidden. Then, on a page trigger, the 
+          dash can be moved one line length, so it looks like the line is being drawn on the page. 
+          <br/>
+          <br/>
+          The parallax effects on the images between the sections were created using the <a href="https://ianlunn.co.uk/plugins/jquery-parallax/" target="_blank" rel="noreferrer">jQuery Parallax</a> plugin by Ian Lunn. This allows overlayed 
+          images to scroll at different rates from one another, giving the illusion of depth in a webpage. 
+          <br/>
+          <br/>
+          The animations in the emoji section were created using <a href="https://greensock.com/tweenmax/" target="_blank" rel="noreferrer">TweenMax</a>, which is an animation tool created by GreenSock. These animations were 
+          called by Scrollama on specific page events. 
+          <br/>
+          <br/>
+          The cluster analysis contains two dynamic charts. First, there is the T-SNE. This graph is a basic scatterplot created in D3 that allows 
+          the user to zoom in and out by scrolling. 
+          <br/>
+          <br/>
+          Finally, the most important data visualization element is the clustered bubbles. These were created using <a href="https://github.com/d3/d3-force" target="_blank" rel="noreferrer">d3-force</a>, which is a module that 
+          simulates physical forces on the individual items in a D3 chart, in this case, bubbles. An important aspect of this visual is that every 
+          bubble representing a college maintains a consistent position on the chart, even as the article is applying size, color and position changes 
+          to them. Although there are some performance issues associated with giving each college in the U.S. an individual bubble, performing a 
+          comprehensive analysis was more important to me. 
+          </p>
+      </div>
+
+      
+      <p class="prose">
+        As the end of my master's 
+        program fast approaches, I'm starting to feel the graduate school version of the "Sunday scaries." 
+        These are not, however, caused by capstone projects, the stress of finding a full-time job, or even the threat of another Chicago winter. This, instead, is a fear that haunts
+        <a href="https://www.studentdebtrelief.us/student-loans/student-debt-statistics/" target="_blank" rel="noreferrer">71%</a> of all university graduates nationwide: student loans.
+      <br/>
+      <br/>
+        Student loans seem like an idea as old as time itself, but student lending is a rather novel concept.
+        Early in United States history, colleges and universities either did not charge tuition or had very low
+        rates. At that time, the biggest cost of getting an advanced degree was moving and living expenses. Despite the modest expense, 
+        the cost of moving away from home was still prohibitive for many working class families. This led to 
+        colleges mostly made up of students with generational wealth.
+      <br/>
+      <br/>
+        This all changed in the 1920s with the roaring economy. Suddenly, the cost of college was within
+        reach, even if your last name wasn't Rockefeller. By the end of the 1920s, <a href="https://www.bestcollegesonline.com/blog/a-timeline-of-college-tuition/" target="_blank" rel="noreferrer">20%</a> of college-age
+        Americans would enroll in higher education. 
+        The middle of the century continued that trend as the government prioritized access to higher education for an even wider group
+        of people. It started with the GI Bill, which guaranteed free college or vocational school for veterans
+        after World War II. Then, 1965 saw the passing of the Higher Education Act, which helped lower-income 
+        students afford college when they wouldn't have been able to on their own. This also marked the first time the federal
+        government administered student loans, and helped establish many of the financial aid programs we know today.
+      </p>
+      <img class="article" alt="president FDR" src="{% static 'articles/FDR.webp' %}" alt= "alternative text" style="width: 40%; top:unset">
+      <div style="font-size:80%; text-align:center; opacity: .75">FDR signing the G.I. Bill into law in 1944</div> 
+    
+    <p class="prose">
+        These government programs caused attendances at colleges to skyrocket. In the decade after the passing of
+        the Higher Education Act, attendance at public colleges more than doubled. This increase in attendance caused 
+         the limited government grant money to be spread very thin. 
+      <br/>
+      <br/>
+      This is when students begin rushing to take
+         out loans to pay for their advanced degrees, which were becoming more and more necessary to enter into the work-force.
+      <br/>
+      <br/>
+        Starting in the mid-1970s, college tuition began increasing at a <a href="https://www.bestcollegesonline.com/blog/a-timeline-of-college-tuition/" target="_blank" rel="noreferrer">faster rate</a> than the rest of the economy. 
+        This trend could partially be attributed to the demand for higher education exceeding the supply. But it certainly
+        was worsened by the massive state funding cuts to higher education that began in the 1980s and have, essentially,
+        remained to this day. 
+      <br/>
+      <br/>
+      By 1986, students had racked up <a href="https://www.onlinecolleges.net/student-debt-in-the-u-s-part-2-a-brief-history-of-student-debt-in-the-united-states/" target="_blank" rel="noreferrer">$10 billion dollars</a> in student loans. Let's take a look at where we stand today.
+        
+      </p>
+
+        
+    </body>
+
+    <section id="firstscrolly" style="margin-bottom: 200px">
+      <div>
+        <img class="article" alt="mountain background" src="{% static 'articles/MountainRoad.webp' %}" id="Mountain Road">
+        <img class="article" alt="money mountain" src="{% static 'articles/MoneyMountain.webp' %}" id="Money Mountain"> 
+        <svg class="article" id="flcLegend" style="position: sticky; top: 0; height: 150px; width: 100%;  opacity: 0; transform: translate(70px, 40px);"></svg>
+        <svg class="article" id="firstlinechart" width="1150" height="700" position=sticky top=0 opacity=0 style="padding-top: 30px;"></svg>
+
+          <article class="centerpositioned">
+
+            
+
+          <div class="firstscrolly">
+
+            <div class="step boxed" data-step="5" id="step-flc1"
+
+            data-scrollama-index="4" style="height: 125px;">
+
+                <p>
+
+                  This mountain represents the current $1.6 trillion dollars of existing student debt.
+
+                </p>
+
+            </div>
+
+            <div class="hidden-step" data-step="1"
+
+            data-scrollama-index="4" style="height: 325px;">
+
+              
+
+            </div>
+
+            <div class="step boxed" data-step="6" id="step-flc2"
+
+            data-scrollama-index="5" style="height: 125px;">
+
+
+                <p>
+
+                 This amount of money boggles the mind. 
+
+                </p>
+
+
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="5" style="height: 325px;">
+            </div>
+
+            <div class="step boxed" data-step="7" id="step-flc3"
+            data-scrollama-index="6" style="height: 125px;">
+              <div>
+                <p>
+                  So how did we get here..?
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+            <div class="step boxed" data-step="7" id="step-flc4"
+            data-scrollama-index="6" style="height: 125px;">
+              <div>
+                <p>
+                  This is the average price of tuition in the United States at public and private schools since 1988
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+            <div class="step boxed" data-step="7" id="step-flc5"
+            data-scrollama-index="6" style="height: 125px;">
+              <div>
+                <p>
+                  This dark blue line represents the maximum Pell Grant amount awarded to students.
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+            <div class="step boxed" data-step="8" id="step-flc6"
+            data-scrollama-index="7" style="height: 125px;">
+              <div>
+                <p>
+                  As you can see, the Pell Grants have failed to keep up with rising tuition, which causes 
+                  people to take out more in loans to make up the difference.
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+            <div class="step boxed" data-step="9" id="step-flc7"
+            data-scrollama-index="8" style="height: 125px;">
+              <div>
+                <p>
+                  This light blue line is the amount of money the government has spent on higher education per full-time student.
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+            <div class="step boxed" data-step="10" id="step-flc8"
+            data-scrollama-index="9" style="height: 125px;">
+              <div>
+                <p>
+                  As with the maximum Pell Grant awarded, government funding for higher education has completely
+                  plateaued for the last three decades
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 625px;">
+            </div>
+
+          </div>
+        </article>
+      </div>
+      
+    </section>
+
+      <body>
+          <ul id="nav">
+            <li><a href="#intro" title="Next Section"><img class="article" src="https://ianlunn.co.uk/plugins/jquery-parallax/images/dot.png" alt="Link" /></a></li>
+            
+          </ul>
+  
+          <div id="intro">
+            <div class="story">
+              <img alt="quote image" class="quote, article" src="{% static 'articles/FirstQuote.webp' %}" height="669" alt="">
+            </div> <!--.story-->
+          </div> <!--#intro--> 
+  
+        </body>
+
+      
+      <body>
+          
+        <p class="prose" top=200 style="margin-top: 100px; margin-bottom: 0px">
+          Government funding getting slowly drained from higher education has led to colleges scrambling to 
+          find revenue from other sources. And tuition increases have proved an easy way to shift that burden 
+          onto the student: A college degree has become essential to find a well-paying job in the 
+          modern work-force, as almost every job created since the recession has gone to a college graduate. 
+          This gives colleges enormous leverage over students, allowing them to charge essentially any price they want. 
+          <br>
+          <br>
+          Another source of school funding is philanthropy. Colleges will gladly accept money from private 
+          citizens, foundations or corporations. If you give enough, they might even 
+          let you put your name on a building (check out the Northwestern Pritzker School of Law or Carnegie Mellon University). If you'd 
+          like your own naming rights, you can find Northwestern's handy guide <a href="https://www.northwestern.edu/fm/contractors/10-1400-donor-recognition-fm-guidelines-aug-2018_for-fm.pdf" target="_blank" rel="noreferrer">here.</a> 
+          <br>
+          <br>
+          While naming rights to a building or bench may seem innocuous enough, decreased government funding 
+          for higher education means colleges are more desperate for money, which can lead 
+          to them being held captive by the ideologies of their donors. John M. Olin and the Koch brothers 
+          are among the most prominent of America's elite to realize they could use college philanthropy to their political advantage. 
+          By founding entire college departments and hiring professors preaching corporation-friendly 
+          ideologies--and even creating a new approach to jurisprudence called "Law and Economics"--these billionaires have been able to launder their interests through respected universities.<sup><a href="http://www.smcm.edu/democracy/wp-content/uploads/sites/29/2015/07/how-right-wing-billionaires-infiltrated-higher-education.pdf" target="_blank" rel="noreferrer">[1]</a></sup>
+          <br>
+          <br>
+        </p>
+          <img class="article" alt="photo of John M Olin" src="{% static 'articles/olin.webp' %}" alt= "alternative text" style="width: 40%; top:unset">
+          <div style="font-size:80%; text-align:center; opacity: .75">John M. Olin inside the Olin Business School at Washington University in St Louis</div> 
+        
+        <p class="prose">
+          Yet another way for colleges to bring in cash is through investing.
+          An endowment is essentially how much money a college has in the bank, and it gets there either 
+          through donations or other funding sources. But the more important aspect of an endowment is how it gets
+          spent--or not. More than 100 U.S. universities currently have an endowment of more than $1 billion <sup><a href="https://www.usatoday.com/story/money/business/2019/03/28/college-endowment-universities-receive-most-gifts-funds/39230729/" target="_blank" rel="noreferrer">[2]</a> </sup> .
+          Northwestern University currently has a $11.1 billion endowment, and Harvard, of course, leads the way
+          with $38.3 billion in the bank. This money, and the returns it generates, can be used for financial aid programs, new facilities,
+          or athletics. More often, however, it's just reinvested back into the endowment to make even more money 
+          for the next year.
+          <br>
+          <br>
+          This may seem fine, and in a vacuum, it is! Endowments are often thought of as a sort of rainy day fund--some
+           extra money to get a school through a major recession or an unexpected cut in funding.
+          However, more and more, universities are obsessed with maintaining their endowment's value at all costs. 
+          And I mean that quite literally: Yale has spent $480 million in one year on private equity fund managers 
+          to manage their endowment. Compare that to the $170 million that was given to their students in the same 
+          year in the form of tuition assistance, fellowships and prizes<sup><a href="https://www.nytimes.com/2015/08/19/opinion/stop-universities-from-hoarding-money.html?_r=0" target="_blank" rel="noreferrer">[3]</a> </sup>. 
+          You can see why some people call large universities banks with an education wing.
+          <br>
+          <br>
+          <img class="article" alt="roll of money" src="{% static 'articles/money.webp' %}" style="width: 20%; margin-bottom: 30px; top:unset">
+          One could reasonably believe that a college is free to do with its endowment as it wishes, and if 
+          they wish to hoard all of this wealth, then that's their business. But the reality is that the entire
+          endowment system is heavily subsidized by taxpayers. So this stock-piling of assets, wherein the largest returns are going 
+          to hedge fund managers rather than students, is happening at a cost to all of us. For elite private 
+          universities, the average taxpayer subsidizes $13,000 per student per year, and at prestigious public 
+          universities, the average subsidy is closer to $23,000 per student per year. Princeton leads all schools with $105,000
+          of taxpayer subsidy per student per year<sup><a href="https://www.air.org/sites/default/files/downloads/report/WhoWins_bookmarked_050411_0.pdf" target="_blank" rel="noreferrer">[4]</a> </sup>.
+          <br>
+          <br>
+          Despite all the money these elite universities pay for investors to handle their endowment, it's not quite
+          clear how good the investors actually are at their job. Not a single Ivy League endowment has beaten the returns of a simple 
+          60/40 portfolio (60% bonds, 40% stocks) in the years since the 2008 recession <sup><a href="https://www.institutionalinvestor.com/article/b1c1c4tq2bjm3c/Not-One-Ivy-League-Endowment-Beat-a-Simple-U-S-60-40-Portfolio-Over-Ten-Years" target="_blank" rel="noreferrer">[5]</a> </sup> 
+          <br>
+          <br>
+          But do tuition increases, which come in the wake of shrinking government funds and endowment hoarding, 
+          really affect students post graduation? After all, they still get an advanced degree, which they can use to land a great job. 
+          What's the problem here?
+        </p>
+        <p class="prose">
+          
+        </p>
+
+      </body>
+
+      <section class="img" id="scrollyleft">
+
+        <article>
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 225px;">
+            </div>
+            <div class="step" style="height: 350px; width: 300px;">
+                <p>One in seven Americans owes a portion of that giant mountain of debt you saw in the beginning. That's 44 million
+                    people. And out of those people, 5.1 million of them are in default <sup><a href="https://www.forbes.com/sites/zackfriedman/2019/02/25/student-loan-debt-statistics-2019/#655c3c33133f" target="_blank" rel="noreferrer">[6]</a> </sup> . Let's take a look at 
+                    how that compares to rates of default for debt linked to the Great Recession.</p>
+              </div>
+            <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 375px;">
+            </div>
+          <div class="step" id = "step-slc1" data-step="1" data-scrollama-index="0" style="height: 550px; width: 300px;">
+            <p>Here's what the rate of default on mortgages was in the United States from 2003 to 2017 </p>
+          </div>
+          <div class="step" style="height: 546px; width: 300px;">
+              <p>The rate peaked around 8% in the middle of the recession, but has since leveled off to approximately its
+                level before the recession
+              </p>
+            </div>
+          <div class="step" id = "step-slc2" data-step="2" data-scrollama-index="1" style="height: 546px; width: 300px;">
+            <p>The rate of default on credit cards was even worse</p>
+          </div>
+          <div class="step" style="height: 546px; width: 300px;">
+              <p>However, credit card default rates are almost always higher than mortgages, and they also returned to normal post-recession.
+              </p>
+            </div>
+          <div class="step" id = "step-slc3" data-step="3" data-scrollama-index="2" style="height: 500px; width: 300px;">
+            <p>Here are the default rates for auto loans and revolving debt</p>
+          </div>
+          <div class="hidden-step" data-step="1"
+            data-scrollama-index="6" style="height: 125px;">
+            </div>
+          <div class="step" id = "step-slc4" data-step="4" data-scrollama-index="3" style="height: 500px; width: 300px;">
+            <p>Finally, let's look at the rate of default on student loan debt</p>
+          </div>
+          <div class="step" id = "step-slc5" data-step="5" data-scrollama-index="4" style="height: 500px; width: 300px;">
+              <p>Not only is this rate currently past the rate of default during the peak of the housing crisis ...</p>
+          </div>
+          <div class="step" id = "step-slc6" data-step="6" data-scrollama-index="5" style="height: 500px; width: 300px;">
+              <p>... the default rate has never gone down, even post-recession</p>
+          </div>
+          <div class="step" id = "step-slc7" data-step="7" data-scrollama-index="6" style="height: 500px; width: 300px;">
+              <p>How high can it go?</p>
+          </div>
+          <div class="step" id = "step-slc8" data-step="8" data-scrollama-index="7" style="height: 500px; width: 300px;">
+              <p>What will this graph look like if there's another recession?</p>
+          </div>
+
+        </article>
+
+        <figure>
+            <svg id="slcLegend" style="position: sticky; top: 0; height: 150px; width: 100%;  opacity: 0; transform: translate(70px, 40px);"></svg>
+          <svg id="secondlinechart" width=width height="700" position=sticky top=0 opacity=1 style="padding-top: 30px;"></svg>
+        </figure>
+      </section>
+
+      <body>
+          <ul id="nav"> 
+            <li><a href="#second" title="Next Section"><img class="article" alt="parallax scrolling" src="https://ianlunn.co.uk/plugins/jquery-parallax/images/dot.png" alt="Link" /></a></li>
+          </ul>
+  
+          <div id="second">
+            <div class="story"><div class="bg" style="background-position: 400px"></div>
+              <div class="float-right">
+                <img alt="image of quote" class="quote, article" src="{% static 'articles/SecondQuote.webp' %}" width="800" height="669" alt="">
+              </div>
+            </div> <!--.story-->
+          </div> <!--#second-->
+  
+        </body>
+
+
+      <body>
+
+        <p class="prose" style="margin-top: 100px;">
+        Student debt is a $1.6 trillion crisis we can no longer ignore. Although we
+        don't know what this crisis is going to look like in the future, we know that defaulting, 
+        or even the threat of defaulting, on student loan debt is causing students to alter their lives in massive ways.
+        <br/>
+        <br/>
+        People get advanced degrees in order to gain increased flexibility in their careers: 
+        More jobs are willing to hire you with an advanced degree; the connections you make in just a few years at college would
+        take a lifetime of networking to make in the work-force; and higher education can open more 
+        doors for you right out of high school than essentially any other career path can. But 
+        how many is it closing?
+        <br/>
+        <br/>
+        As the student debt burden continues to climb, which life choices are being altered
+        by your pursuit of an advanced degree? <sup><a href="https://studentloanhero.com/featured/graduates-student-loan-debt-financial-milestones-survey/" target="_blank" rel="noreferrer">[7]</a> </sup>
+        </p>
+
+      </body>
+
+
+      <section id="emojiscrolly">
+        <div>
+          <figure class="debt_container">
+
+            <img alt="baby emoji" src="{% static 'articles/baby.webp' %}" id="baby"
+            class = "picture_is_visible">
+
+            <img alt="worker emoji" src="{% static 'articles/worker.webp' %}" id="worker"
+            class = "picture_is_not_visible">
+
+            <img alt="grandma emoji" src="{% static 'articles/older-woman.webp' %}" id="retire"
+            class = "picture_is_not_visible">
+
+            <img alt="house emoji" src="{% static 'articles/house.webp' %}" id="house"
+            class = "picture_is_not_visible">
+
+            <div style="
+            position: fixed;
+            right: 90px;">
+              <span style="font-size: 3rem;">
+                <span style="color: Mediumslateblue;">
+                <i class="fas fa-smile" style="opacity: 1;" id="smile1" ></i>
+                <i class="fas fa-smile" style="opacity: 1;" id="smile2"></i>
+                <i class="fas fa-smile" style="opacity: 1;" id="smile3"></i>
+                <i class="fas fa-smile" style="opacity: 1;" id="smile4"></i>
+                <i class="fas fa-smile" style="opacity: 1;" id="smile5"></i>
+                </span>
+              </span>
+              
+            </div>
+            <div style="
+            position: fixed;
+            right: 90px;">
+              <span style="font-size: 3rem;">
+                <span style="color: tomato;">
+                <i class="fas fa-meh" style="opacity: 0;" id="frown1"></i>
+                <i class="fas fa-meh" style="opacity: 0;" id="frown2"></i>
+                <i class="fas fa-meh" style="opacity: 0;" id="frown3"></i>
+                <i class="fas fa-meh" style="opacity: 0;" id="frown4"></i>
+                <i class="fas fa-meh" style="opacity: 0;" id="frown5"></i>
+                </span>
+              </span>
+            </div>
+
+            <div style="
+            position: fixed;
+            top: 60px;
+            right: 90px;">
+              <span style="font-size: 3rem;">
+                <span style="color: Mediumslateblue;" >
+                <i class="fas fa-smile"></i>
+                <i class="fas fa-smile"></i>
+                <i class="fas fa-smile" ></i>
+                <i class="fas fa-smile"></i>
+                <i class="fas fa-smile" ></i>
+                </span>
+              </span>
+              
+            </div>
+            <div style="
+            position: fixed;
+            top: 60px;
+            right: 90px;">
+              <span style="font-size: 3rem;">
+                <span style="color: tomato; opacity: 0;" >
+                <i class="fas fa-meh" ></i>
+                <i class="fas fa-meh"></i>
+                <i class="fas fa-meh"></i>
+                <i class="fas fa-meh"></i>
+                <i class="fas fa-meh"></i>
+                </span>
+              </span>
+            </div>
+          </figure>
+          <article class="centerpositioned">
+
+          
+
+          <div class="emojiscrolly">
+            <div class="hidden-step" data-step="8" data-scrollama-index="6" style="height: 325px;"></div>
+            <div class="step" data-step="5" id="step-emoji1"
+            data-scrollama-index="4" style="height: 125px;">
+              <div>
+                <p>
+                  10% of people said student debt has kept them from having a baby when they wanted
+                </p>
+              </div>
+            </div>
+            <div class="hidden-step" data-step="6" data-scrollama-index="4" style="height: 325px;"></div>
+
+            <div class="step" data-step="6" id="step-emoji2" data-scrollama-index="5" style="height: 125px;">
+              <div>
+                <p>
+                  20% of people haven't been able to change jobs because of their student debt burden
+                </p>
+              </div>
+            </div>
+            <div class="hidden-step" data-step="7" data-scrollama-index="5" style="height: 325px;"></div>
+
+            <div class="step" data-step="7" id="step-emoji3" data-scrollama-index="6" style="height: 125px;">
+              <div>
+                <p>
+                  30% have delayed saving for retirement 
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="8" data-scrollama-index="6" style="height: 325px;"></div>
+            <div class="step" data-step="8" id="step-emoji4" data-scrollama-index="6" style="height: 125px;">
+              <div>
+                <p>
+                  Nearly half of survey respondents said their student debt prevented them from buying a home
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden-step" data-step="9" data-scrollama-index="7" style="height: 625px;"></div>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <body>
+          <div class="hidden-step" data-step="9" data-scrollama-index="7" style="height: 350px;"></div>
+          <p class="prose">
+              
+            Delaying children? Staying in a job you don't like? Continuing to rent an apartment when you'd rather own a home, or 
+            paying back student debts when you'd rather be starting a nest egg? The enormous weight of student debt has pushed itself
+            into nearly every facet of life. 
+            <br/>
+            <br/>
+            While op-ed columnists love pointing out how millennials are "killing" the <a href="https://www.usatoday.com/story/money/2017/05/16/millionaire-tells-millennials-your-avocado-addiction-costing-you-house/101727712/" target="_blank" rel="noreferrer">real estate industry</a>, <a href="https://www.sheknows.com/health-and-wellness/articles/1091871/millennial-daters-too-casual/" target="_blank" rel="noreferrer">relationships</a> and the <a href="https://qz.com/1574174/millennials-are-right-to-kill-the-american-car/" target="_blank" rel="noreferrer">auto industry</a>
+            , it seems quite obvious that this has less to do with youthful arrogance or spite 
+            than the simple fact that millennials don't have much spending power--at least compared to the generations that came before <sup><a href="https://www.cnbc.com/2018/12/04/millennials-spend-less-because-theyre-poorer-federal-reserve-says.html" target="_blank" rel="noreferrer">[8]</a> </sup>.
+            <br/>
+            <br/>
+            And while student debt can impact everyone's life choices, women and people of color are especially hard hit. 
+          </p>
+  
+        </body>
+
+      <body>
+        <ul id="nav">
+          <li><a href="#third" title="Next Section"><img class="article" src="https://ianlunn.co.uk/plugins/jquery-parallax/images/dot.png" alt="Link" /></a></li>
+        </ul>
+
+
+        <div id="third">
+          <div class="story">
+            <div class="float-left">
+              <img alt="quote photo" class="quote, article" src="{% static 'articles/ThirdQuote.webp' %}" width="800" height="669" alt="" style="margin-top: 100px;">
+            </div>
+          </div> <!--.story-->
+        </div> <!--#third-->
+
+        
+
+      </body>
+
+      <body>
+          <p class="prose" style="margin-top: 100px; margin-bottom: 30px">
+            There are thousands of colleges in the United States. Are they all contributing to the debt 
+            crisis at the same rate? What traits do these colleges have that distinguish themselves from each
+            other in terms of debt? These were the questions I sought to answer in my final analysis. 
+            <br/>
+            <br/>
+            First, I created a dataset using the <a href="https://collegescorecard.ed.gov/data/documentation/" target="_blank" rel="noreferrer">College Scorecard</a>, which is a tool the US government made
+            to help students compare colleges in key metrics. The metrics I decided would most apply to 
+            this study were average grant aid awarded, average loans awarded, number of undergraduate
+            students, median debt after graduation, median earnings 10 years after graduation, the default
+            rate for students within three years of graduation, and the average net cost of the school (sticker price minus average aid).
+            <br/>
+            <br/>
+            Since these metrics were distributed across multiple College Scorecard datasets, I had to join them by a common 
+            school ID. Then, I had to make sure these schools had enough public data for me to analyze. College Scorecard 
+            suppresses data from any field that contains fewer than 30 students out of privacy concerns. I started out with 
+            3,626 schools, but had to narrow this down to 3,180 after about 450 school had debt at graduation or median earnings 
+            as “Privacy Suppressed.” The rest of the schools had their data normalized and run through the scikit-learn K-means 
+            package to group them into individual clusters.
+            <br/>
+            <br/>
+            K-means is an unsupervised machine learning algorithm which takes data with many dimensions like these schools, 
+            and assigns them to k different clusters by minimizing the distance between these schools and the center of 
+            the cluster in which they're assigned. The first step in this analysis is to create an elbow plot to decide how 
+            many clusters to sort the schools into. 
+            <br/>
+            <br/>
+          </p>
+            <p style="color: black; margin-top: 0px; margin-bottom: 20px; text-align: center; font-weight: 700"><b>Elbow Plot</b></p>
+            <p class="prose" style="margin-top: 0px; margin-bottom: 100px">
+            <img class="article" alt="elbow plot" src="{% static 'articles/ElbowPlot.webp' %}" style="position:inherit; max-width: 70%;">
+            <br/>
+            The y-axis here tells us the sum of squared distances between the individual points and the 
+            center of their clusters. The x-axis tells us how many clusters were created. Adding additional 
+            clusters will always decrease the sum of squared distances, but adding too many clusters makes them less practical or 
+            intuitive, and could potentially overfit the data. Choosing the number of clusters is more art than 
+            science, but five clusters for this dataset seems to be the point where the benefit 
+            from adding additional clusters becomes marginal.
+
+            
+  
+          </p>
+
+            <section class="img" id="scrollyleft">
+
+                <article style="max-width: 30%;">
+                    <p class="prose">
+                        As indicated at the top of this cluster heat map, five clusters also gives us fairly even cluster
+                        sizes, which is ideal. Now let's take a look to see if we can interpret what these clusters
+                        represent.             
+                      </p>
+                    <p class="prose">
+                        Cluster 1 schools have low cost and low median debt, but their default rate is tied for highest
+                        among the clusters. A lot of cluster 1 schools are community colleges or tech schools. Examples
+                        include Illinois Valley Community College, North Georgia Technical College and New Mexico Junior
+                        College. We can generalize and call these "trade schools."
+                      </p>
+                      <p class="prose"> 
+                        Cluster 2 schools are pretty average across the board, except they typically have the highest debt.
+                        Examples of cluster 2 schools are the Art Institute of Seattle, Chicago State University and Prairie
+                        View A&M University. This cluster is difficult to name because it's the largest, and it also encompasses the 
+                        widest variety of schools. But let's call these "mid-level regional colleges."
+                      </p>
+                      <p class="prose">
+                        Cluster 3 schools have the highest costs and highest median debt--but also receive the highest earnings,
+                        get the most financial aid, and have the lowest default rate. These tend to be very prestigious and
+                        expensive schools, populated with wealthy students that can typically afford to pay back the debt. Examples
+                        of these schools are Northwestern University and all of the Ivys. We'll call this cluster "elite universities."
+                      </p>
+                      <p class="prose">
+                        Cluster 4 schools seem to be the most dangerous schools, at least in terms of student loans. Their costs are above average, 
+                        they easily take out the most loans, and the default rates are also quite high. These schools also have the 
+                        lowest average earnings among the clusters. Examples of these schools are the Southwest Institute of Healing 
+                        Arts, Commonwealth Institute of Funeral Service, and the Art Institute of Indianapolis. Let's call these "high risk schools."
+                      </p>
+                      <p class="prose">
+                        Lastly, we have cluster 5 schools, which are mostly made up of giant state schools. They have by far the highest attendance, but they 
+                        make up for that with pretty high earnings, and fairly low cost and default rates. Examples of these schools 
+                        are Purdue University, the University of Wisconsin, and Ohio State University. We'll just call these "large public colleges."
+                      </p>
+                      <p class="prose">
+                          This heatmap is useful for seeing the general traits of the clusters, but using some more advanced analytical techniques, we 
+                          can look at where each individual school falls in relation to each other.
+                      </p>
+  
+
+                      
+                      
+        
+                </article>
+                
+                
+                    
+        
+                <figure>
+                    <img class="article" alt="cluster plot" src="{% static 'articles/ClusterPlot.webp' %}" style="max-width: 70%; top: 10%">
+                </figure>
+
+                
+              </section>
+
+
+
+
+              <section class="img" id="scrollyleft">
+
+                  <article style="max-width: 30%; margin-top: 100px">
+                      <p class="prose">
+                          t-Distributed Stochastic Neighbor Embedding or "t-SNE" is a dimensionality reduction technique
+                          which allows users to see high-dimensional datasets in a dimension better suited for data visualization.        
+                        </p>
+                      <p class="prose">
+                          Here, I plotted every college in the United States and the seven attributes associated with them from 
+                          the K-means clustering on a two-dimensional space. Each school is colored by the cluster with which it's associated. 
+                          Generally, the points on this plot that are closer together are more similar than those that are more separated.
+                        </p>
+                      <p class="prose">
+                          Although the schools from each cluster are generally grouped together, you can see some areas where schools from different 
+                          clusters overlap. These are schools that share some common characteristics 
+                          from both clusters, but ultimately came closer to the cluster they were assigned in the seven dimensional space. 
+                        </p>
+                        <p class="prose"> 
+                          For example, if you hover your mouse over the elite schools in the top right, you notice the schools 
+                          farthest away from everything else (farthest top right) are ultra-elite schools like Princeton, Harvard and MIT. This is because these schools 
+                          share very few characteristics with anything else on the plot. But there are also two points 
+                          in the elite universities cluster that are grouped in the middle of the schools from the large public schools cluster. 
+                          These are the University of Virginia and the University of New Hampshire. These schools share a lot of similar attributes 
+                          with schools in the large public school cluster, but ultimately ended up closer to the elite universities when taking 
+                          all seven dimensions into account.
+                        </p>
+                        <p class="prose"> 
+                          You can explore the graph on your own by hovering over the points to display their attributes. If the tooltip gets in the way, you 
+                          can click your mouse to make it temporarily disappear. Once you hover over one of the points, all of the points from the 
+                          other clusters will fade to grey to give you a better picture of where that cluster stands in the greater scheme. If you want to 
+                          take a closer look at a section of the map, you can zoom in by scrolling your mouse and pan around the screen by clicking and 
+                          dragging.
+                        </p>
+                            
+          
+                  </article>
+                
+                  <figure top:0>
+                      <svg id="tsneClusterLegend" style="position: sticky; top: 0; height: 130px; width: 100%; padding: 50px 0px 0px 55px;  opacity: 1;"></svg>
+                      <div id="tsne" style="position: sticky; top: 20px;"></div>
+                      <!-- <script src="js/tsne.js"></script> -->
+                      
+                  </figure>
+  
+                </section>
+             
+        
+             
+        </body>
+
+      <section id="bubblescrolly">
+          <section class="img" id="bubblescrolly">
+              <article>
+
+                <div class="step" id = "step-bubble1" data-step="11" data-scrollama-index="0" style="height: 546px; width: 300px; margin-top: 250px">
+                  <p>Now that we know a bit about these clusters, let’s explore them more in-depth in a less static way.
+                  </p>
+                </div>
+
+                <div class="step" style="height: 546px; width: 300px;">
+                    <p>I’ve created a bubble below for every school in the college scorecard dataset. You can hover your 
+                        mouse over them to see their cluster attributes. 
+                    </p>
+                  </div>
+
+                <div class="step" id = "step-bubble2" data-step="12" data-scrollama-index="1" style="height: 546px; width: 300px;">
+                  <p>Let’s see what they look like when they’re organized by their clusters.</p>
+                </div>
+                
+                <div class="step" style="height: 546px; width: 300px;">
+                    <p>As we already know, the clusters are about evenly split except for the fifth one. Feel free to hunt 
+                        around for a school that is meaningful to you, but first let me highlight a few that are of interest to me.
+                    </p>
+                  </div>
+
+                <div class="step" id = "step-bubble3" data-step="13" data-scrollama-index="2" style="height: 546px; width: 300px;">
+                  <p>This red dot is the University of Wisconsin, where I went to undergrad. It's a very large 
+                    public university with a low cost and high relative earnings. This leads to a very low default rate 
+                    of 1.6%. All of these attributes are characteristic of this cluster.
+                    </p>
+                </div>
+
+                <div class="step" id = "step-bubble4" data-step="14" data-scrollama-index="3" style="height: 546px; width: 300px;">
+                  <p>This purple dot is Northwestern University, where I’m currently attending graduate school. 
+                    Northwestern is included in the cluster that I call “elite colleges." These typically have a 
+                    higher cost and higher debt than other schools, but they make up for it by giving out much more 
+                    grant aid (median of $38,500 vs UW’s median of $6,500) and graduate students with higher earnings. </p>
+                </div>
+
+                <div class="step" id = "step-bubble5" data-step="15" data-scrollama-index="4" style="height: 546px; width: 300px;">
+                    <p>The Ivy League schools are probably the most classic examples of this cluster.</p>
+                  </div>
+                
+                <div class="step" id = "step-bubble6" data-step="16" data-scrollama-index="5" style="height: 546px; width: 300px;">
+                    <p>Here is every college in Illinois. As you can see, this is a diverse group. Here 
+                      you’ll find everything from large public schools like the University of Illinois 
+                      to much smaller operations like McHenry County College.
+                      </p>
+                  </div>
+
+                <div class="step" id = "step-bubble7" data-step="17" data-scrollama-index="6" style="height: 546px; width: 300px;">
+                    <p>You can get a sense for the attributes of each cluster by hovering your mouse over the 
+                      schools in each one, though perhaps a better way is to actually use some size and color.
+                      </p>
+                  </div>
+
+                <div class="step" id = "step-bubble8" data-step="18" data-scrollama-index="7" style="height: 546px; width: 300px;">
+                    <p>This is what it looks like when the size of the bubbles correspond to the size of the 
+                      undergraduate population at each school. It’s no surprise that the fifth cluster has most 
+                      of the massive schools. But now let’s size these bubbles using a measure that has 
+                      to do with the debt crisis.</p>
+                  </div>
+
+                <div class="step" id = "step-bubble9" data-step="19" data-scrollama-index="8" style="height: 546px; width: 300px;">
+                    <p>Here the bubbles are sized by the median debt a student has coming out of college. It’s 
+                      pretty easy to see that the schools with the most debt fall into clusters 2 and 3. Let’s next
+                      bring in another variable we haven’t seen before to help explain this phenomenon.</p>
+                  </div>
+                
+                <div class="step" id = "step-bubble10" data-step="20" data-scrollama-index="9" style="height: 546px; width: 300px;">
+                    <p>Here the clusters are colored by type of school. Although cluster 2 is a mix, clusters 
+                      1 and 5 are dominated by public schools, while 3 is overwhelmingly private nonprofits 
+                      and 4 is a majority of private for-profits. But as we saw in the heat map above, a large 
+                      amount of debt does not always correlate to a high chance of defaulting. Let’s color the 
+                      bubbles based on the average default rate for students.
+                      </p>
+                  </div>
+
+                <div class="step" id = "step-bubble11" data-step="21" data-scrollama-index="10" style="height: 546px; width: 300px;">
+                    <p>This tells the same story: Although the elite universities in cluster 3 have some of the 
+                      highest debt out of college, their default rates are some of the lowest--whereas students 
+                      attending the trade schools and for-profit colleges in clusters 1 and 4 have extremely 
+                      high rates of default. We already know two of the reasons why this may be based off our analysis.
+                      </p>
+                  </div>
+
+                <div class="step" id = "step-bubble12" data-step="22" data-scrollama-index="11" style="height: 546px; width: 300px;">
+                    <p>Students at elite universities get much more aid than students at other schools.</p>
+                  </div>
+
+                <div class="step" id = "step-bubble13" data-step="23" data-scrollama-index="12" style="height: 546px; width: 300px;">
+                    <p>And cluster 1 and 4 schools have by far the lowest median earnings.</p>
+                  </div>
+
+                <div class="step" id = "step-bubble14" data-step="24" data-scrollama-index="13" style="height: 546px; width: 300px;">
+                    <p>When we color the bubbles by gender of the student body, a couple of trends stand out. First, a lot of these 
+                      schools tend to hover around 40% male, which lines up with recent trends in higher ed. The second trend, however,
+                       shows that a lot of the high risk schools in the fourth cluster are more than 80% female.
+                    </p>
+                  </div>
+
+                <div class="step" id = "step-bubble15" data-step="25" data-scrollama-index="14" style="height: 546px; width: 300px;">
+                    <p>By coloring the bubbles to look at the proportion of black students in these schools, we see this pattern stand out 
+                      even more. Almost all of the predominantly black colleges are in clusters 2 and 4. Aside from Howard and Spelman, the elite colleges and large public schools--the
+                      ones with the best earning prospects and lowest risks of default--are dominated by non-black students. 
+                    </p>
+                  </div>
+
+                <div class="step" id = "step-bubble16" data-step="26" data-scrollama-index="15" style="height: 546px; width: 300px;">
+                  <p>There are plenty of interesting ways to combine these College Scorecard attributes in order to show patterns in 
+                    the data, so I want to give the reader an opportunity to do it themselves. Below, you can choose your own attributes for the size 
+                    and color of the bubbles. In addition to the attributes I've already described, there's also a color feature included called 
+                    "change in grant aid," which is the amount of additional grant aid per student a school has received since the recession. 
+                    A negative value represents a decrease in grant aid per student. 
+                  </p>
+                </div>
+
+                  <div class="step" id = "step-bubble17">
+
+                    
+                    <div >
+                      <h3 style="text-align: left">Set Bubble Attributes</h3>
+                      <div >
+                          <p>Size:  &nbsp &nbsp 
+                          <select class="size" style="background-color: white;" name="BubbleSize">
+                            <option>Avg Debt</option><option>Net Cost</option><option>Median Earnings</option><option>Number of Undergrads</option><option>Average Aid Provided</option><option>Average Loans Taken Out</option><option>None</option>
+                          </select>
+                          <br/>
+                          Color:&nbsp
+                        <select class="color" style="background-color: white;" name="BubbleColor">
+                          <option>Percent of Black Students</option><option>Percent of Male Students</option><option>School Type</option><option>Default Rate</option><option>Median Earnings</option><option>Change in Grant Aid</option><option>Net Cost</option><option>None</option>
+                        </select>
+                        </p>
+                    </div>
+                  </div>
+                </div>
+
+                  <div class="hidden-step" data-step="6" data-scrollama-index="4" style="height: 325px;"></div>
+
+              </article>
+        
+              <figure>
+                <svg id="SchoolTypeLegend" style="position: sticky; top: 0; height: 120px; width: 100%;  opacity: 0; padding-top:50px"></svg>
+                <svg id="ClusterLegend" style="position: sticky; top: 0; height: 150px; width: 100%;  opacity: 0; padding-top:50px"></svg>
+                <div id="defaultlegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0; padding: 20px;"> </div>
+                <div id="aidlegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0;padding: 20px;"> </div>
+                <div id="earningslegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0;padding: 20px;"> </div>
+                <div id="genderlegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0;padding: 20px;"> </div>
+                <div id="racelegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0;padding: 20px;"> </div>
+                <div id="aidchangelegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0;padding: 20px;"> </div>
+                <div id="netcostlegend" style="position: sticky; top: 0; height: 60px; width: 100%; padding: 0px 0px 0px 400px; opacity: 0;padding: 20px;"> </div>
+
+                <svg id="my_dataviz6" position=sticky top=10px id="my_dataviz6" style="top:130; height: 60px; width: 100%; padding: 0px; opacity: 0"></svg>
+                <svg id="my_dataviz5" position=sticky top=10px id="my_dataviz5" style="top:130; height: 60px; width: 100%; padding: 0px; opacity: 0"></svg>
+                <svg id="my_dataviz4" position=sticky top=10px id="my_dataviz4" style="top:130; height: 60px; width: 100%; padding: 0px; opacity: 0"></svg>
+                <svg id="my_dataviz3" position=sticky top=10px id="my_dataviz3" style="top:130; height: 60px; width: 100%; padding: 0px; opacity: 0"></svg>
+                <svg id="my_dataviz2" position=sticky top=10px id="my_dataviz2" style="top:130; height: 60px; width: 100%; padding: 0px; opacity: 0"></svg>
+                <svg id="my_dataviz" position=sticky top=10px id="my_dataviz" style="top:130; height: 60px; width: 100%; padding: 0px; opacity: 0"></svg>
+                
+                <svg id="bubblechart" height="600" position=sticky style="width: 120%; top: 40px"></svg>
+              </figure>
+
+            </section>
+
+      </section>
+
+      <body>
+          <ul id="nav">
+            <li><a href="#fourth" title="Next Section"><img class="article" alt="parallax scrolling" src="https://ianlunn.co.uk/plugins/jquery-parallax/images/dot.png" alt="Link" /></a></li>
+          </ul>
+  
+          <div id="fourth">
+            <div class="story">
+              <div class="float-right">
+                <img alt="quote image" class="quote, article" src="{% static 'articles/FourthQuote.webp' %}" width="800" height="669" alt="">
+                </div>
+              </div> <!--.story-->
+          </div> <!--#fourth-->
+  
+        </body>
+  
+
+      <body>
+
+          <p class="prose" style="margin-top: 100px; margin-bottom: 0px">
+            Whatever your situation is--whether you're a prospective college student or midcareer professional that has yet
+            to see their principal go down; whether you're graduating next to me with six figures of debt; or you already have your debt paid off-- please 
+            know that this 👏 system 👏 is 👏 not 👏 normal 👏. 
+            <br/> 
+            <br/>
+            The UK has a similar student debt problem, but their tuition is capped at £9,000 per year <sup><a href="https://www.valuecolleges.com/collegecosts/" target="_blank" rel="noreferrer">[9]</a> </sup>. In Germany, tuition has been 
+            completely abolished. In fact, there are more than 40 countries around the world that offer free public higher education,
+            including Finland, Sweden, Norway, Greece, Brazil and Turkey. Study at any of these schools (some do offer programs in English)
+            and all you're expected to pay is your cost of living. 
+            <br/>
+            <img class="article" alt="earth with graduation hat" src="{% static 'articles/earthgrad.webp' %}" style="width: 20%; top:unset">
+            This is not to say that the United States education system is homogenous. As we've seen, your financial situation after leaving 
+            college can vary widely. Going to an elite school will cost you more, but you're unlikely to feel as much of a pinch 
+            post-graduation as a person that enrolled in a relatively inexpensive trade school. And regardless of what school you attend,
+            women and people of color are the most affected by debt across the board.
+            <br/>
+            <br/>
+            So, aside from enrolling in a Greek college, what can be done about this? As U.S. tuition costs continue to rise, know that something CAN be
+            done to address this. But the powers that be simply choose not to. We are now going on three decades of public school funding cuts that 
+            have not only left our colleges and universities desperate for corporate cash and private donations, but have also devastated 
+            our K-12 system. We are seeing giant universities act as if they're banks or real estate companies, stockpiling cash and 
+            gobbling up property instead of reinvesting in their students.
+            <br/>
+            <br/>
+            As we look towards the future of the U.S. higher education system, we need to ask ourselves: Do we consider education a human right? 
+            Should access to a proper education depend on you or your family's financial situation? Do we continue to allow the 
+            country's elite to launder their wealth and privilege into a degree at a prestigious school, while the working class goes into 
+            debt over a technical degree? The United States of America, the wealthiest country in the history of the world, needs 
+            to guarantee a tuition and debt free higher education to anybody that wants it.
+            <br/>
+            <br/>
+            So, to all those that plan on graduating this year, including each of my classmates: Congratulations. We've earned every ounce of
+            our diplomas, and we'll all move on to bigger and better things. Unfortunately, we'll also 
+            join the other 44 million Americans feeding that giant mountain of debt. Because now, it's payback time. 
+            
+          </p>
+
+          <section id="hatscrolly" style="position: relative;
+                                          max-width: 40rem;
+                                          margin: 0 auto;">
+              <article> 
+              <div class="step" data-step="5" id="step-hat">
+                
+                  <svg id="gradhat"  style="opacity: 0; 
+                                            position: relative;
+                                            margin: 0 auto;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="640" height="500"><defs><path d="M320 324.6L77.47 242.99l239.08-80.46 244.83 82.76L320 324.6z" id="a"/><path d="M147.59 386.67l8.04 9.19v72.42h-29.88v-72.42l6.89-9.19V274.02l14.95 3.45v109.2z" id="b"/><path d="M318.85 397.15c48.85 0 98.08-14.06 147.7-42.16-.15-4.4-.92-26.41-2.3-66.02l-145.4 49.42-145.4-45.98v62.58c64.37 28.11 112.83 42.16 145.4 42.16z" id="c"/><path d="M133.34 397.15v71.13" id="e"/><path d="M140.69 397.15v71.13" id="f"/><path d="M147.59 397.15v71.13" id="h"/><path d="M129.15 397.15v71.13" id="i"/><path d="M151.47 397.15v71.13" id="j"/><path d="M144.17 397.15v71.13" id="k"/><path d="M137.21 397.15v71.13" id="l"/></defs><use xlink:href="#a" fill-opacity="0"/><use xlink:href="#a" fill-opacity="0" stroke="#000"/><use xlink:href="#b" fill-opacity="0"/><use xlink:href="#b" fill-opacity="0" stroke="#000"/><use xlink:href="#c" fill-opacity="0"/><use xlink:href="#c" fill-opacity="0" stroke="#000"/><use xlink:href="#d" fill-opacity="0" stroke="#000"/><use xlink:href="#e" fill-opacity="0" stroke="#000"/><use xlink:href="#f" fill-opacity="0" stroke="#000"/><use xlink:href="#g" fill-opacity="0" stroke="#000"/><use xlink:href="#h" fill-opacity="0" stroke="#000"/><use xlink:href="#i" fill-opacity="0" stroke="#000"/><g><use xlink:href="#j" fill-opacity="0" stroke="#000"/></g><g><use xlink:href="#k" fill-opacity="0" stroke="#000"/></g><g><use xlink:href="#l" fill-opacity="0" stroke="#000"/></g></svg>
+                
+              </div>
+            </article>
+          </section>
+          
+          <img class="article" alt="credits image" src="{% static 'articles/credits.webp' %}" style="width: 10%; margin-bottom: 10px; top:unset">
+          <p class="prose">
+            Thanks to everyone who provided feedback and insight along the way, with special thanks to:
+              <br/>
+              <br/>
+              Hilal Kasikci, Jeremiah Lant, Kobzyev Kyrylo, Will Wallo, Torie Palacios, Marcus Thuillier, Andrew Brandt and Bridget Callaghan
+              <br/>
+          </p>
+              <hr>
+          <p class="prose">
+              If you have any questions, comments or feedback regarding this article, please feel free to send me an <a href="mailto:teddavidcarlson@gmail.com" target="_blank" rel="noreferrer">email</a> or connect on <a href="https://www.linkedin.com/in/ted-david-carlson/" target="_blank" rel="noreferrer">LinkedIn</a>. 
+            </p>
+
+
+          <button type="button" class="collapsible">Click for Citations</button>
+      <div class="content">
+        <p class="prose">
+          <b>Article Citations:</b>
+          <br/>
+          <br/>
+          “College Access and Affordability: USA vs. the World.” Value Colleges, www.valuecolleges.com/collegecosts/.
+          <br/>
+          <br/>
+          Cummings, William. “Millionaire to Millennials: Your Avocado Toast Addiction Is Costing You a House.” USA Today, Gannett Satellite Information Network, 16 May 2017, www.usatoday.com/story/money/2017/05/16/millionaire-tells-millennials-your-avocado-addiction-costing-you-house/101727712/.
+          <br/>
+          <br/>
+          Fleischer, Victor. “Stop Universities From Hoarding Money.” The New York Times, The New York Times, 19 Aug. 2015, www.nytimes.com/2015/08/19/opinion/stop-universities-from-hoarding-money.html?_r=0.
+          <br/>
+          <br/>
+          Friedman, Zack. “Student Loan Debt Statistics In 2019: A $1.5 Trillion Crisis.” Forbes, Forbes Magazine, 14 Oct. 2019, www.forbes.com/sites/zackfriedman/2019/02/25/student-loan-debt-statistics-2019/#19fad6dc133f.
+          <br/>
+          <br/>
+          Goldy-Brown, Sarah. “Student Loan Debt Statistics in 2018 - Student Debt Relief.” Student Debt Relief | Student Loan Forgiveness, Student Debt Relief | Student Loan Forgiveness, 21 Oct. 2019, www.studentdebtrelief.us/student-loans/student-debt-statistics/.
+          <br/>
+          <br/>
+          Hirschlag, Ally. “Relationships Are Getting Dangerously Casual Thanks to Millennial Daters.” SheKnows, 10 July 2018, www.sheknows.com/health-and-wellness/articles/1091871/millennial-daters-too-casual/.
+          <br/>
+          <br/>
+          Klor de Alva, Jorge. Who Wins? Who Pays? 2011, air.org.
+          <br/>
+          <br/>
+          Mayer, Jane. How Right­Wing Billionaires Infiltrated Higher Education. 2016, www.smcm.edu.
+          <br/>
+          <br/>
+          Minkel, Elizabeth. “Millennials Are Right to Kill the American Car.” Quartz, Quartz, 15 Mar. 2019, qz.com/1574174/millennials-are-right-to-kill-the-american-car/.
+          <br/>
+          <br/>
+          Segal, Julie. “Not One Ivy League Endowment Beat a Simple U.S. 60-40 Portfolio Over Ten Years.” Institutional Investor, Institutional Investor, 30 Nov. 2018, www.institutionalinvestor.com/article/b1c1c4tq2bjm3c/Not-One-Ivy-League-Endowment-Beat-a-Simple-U-S-60-40-Portfolio-Over-Ten-Years.
+          <br/>
+          <br/>
+          “Student Debt Part 2: A Brief History of Student Debt in United States.” OnlineColleges.net, 11 Feb. 2019, www.onlinecolleges.net/student-debt-in-the-u-s-part-2-a-brief-history-of-student-debt-in-the-united-states/.
+          <br/>
+          <br/>
+          Suneson, Grant. “These Universities Receive the Most Money through College Endowments.” USA Today, Gannett Satellite Information Network, 29 Mar. 2019, www.usatoday.com/story/money/business/2019/03/28/college-endowment-universities-receive-most-gifts-funds/39230729/.
+          <br/>
+          <br/>
+          Writers, Staff. “A Timeline of College Tuition.” BestCollegesOnline.com, BestCollegesOnline.com, 22 Aug. 2019, www.bestcollegesonline.com/blog/a-timeline-of-college-tuition/.          
+          <br/>
+          <br/>
+          YoniBlum. “Millennials Spend Less than Previous Generations Because They Literally Have Less Money, Fed Says.” CNBC, CNBC, 4 Dec. 2018, www.cnbc.com/2018/12/04/millennials-spend-less-because-theyre-poorer-federal-reserve-says.html.
+          <br/>
+          <br/>
+          <b>Image Citations: </b>
+          <br/>
+          <br/>
+          (32), sillysigi. “Money Making Drawing.” Steemit, steemit.com/drawings/@sillysigi/money-making-drawing.
+          <br/>
+          <br/>
+          “Brown and Black Wooden Chairs Inside Room · Free Stock Photo.” Free Stock Photos, www.pexels.com/photo/auditorium-benches-chairs-class-207691/.
+          <br/>
+          <br/>
+          “Free Image on Pixabay - Graduation Cap, Graduate.” Graduation Cap Graduate - Free Image on Pixabay, pixabay.com/illustrations/graduation-cap-graduate-graduation-3407621/.
+          <br/>
+          <br/>
+          “G.I. Bill.” Wikipedia, Wikimedia Foundation, 10 Nov. 2019, en.wikipedia.org/wiki/G.I._Bill#/media/File:GI_Bill_signing.jpg.
+          <br/>
+          <br/>
+          Imgur. “Mountain Background.” Imgur, 21 May 2018, imgur.com/gallery/t6vsAYT.
+          <br/>
+          <br/>
+          “Newly Graduated People Wearing Black Academy Gowns Throwing Hats Up in the Air · Free Stock Photo.” Free Stock Photos, www.pexels.com/photo/accomplishment-ceremony-education-graduation-267885/.
+          <br/>
+          <br/>
+          “Olin Business School Centennial.” Olin Business School Centennial RSS, olin100.wustl.edu/.
+          </p>
+      </div>
+
+        </body> 
+    
+      <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+          
+          <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+          <script type="text/javascript" src="https://ianlunn.co.uk/plugins/jquery-parallax/scripts/jquery.parallax-1.1.3.js"></script>
+          <script type="text/javascript" src="https://ianlunn.co.uk/plugins/jquery-parallax/scripts/jquery.localscroll-1.2.7-min.js"></script>
+          <script type="text/javascript" src="https://ianlunn.co.uk/plugins/jquery-parallax/scripts/jquery.scrollTo-1.4.2-min.js"></script>
+      </head>
+  <script>
+    // using d3 for convenience
+		var main = d3.select('main')
+    var scrolly = main.select('#scrolly');
+    var firstscrolly = main.select('#firstscrolly');
+    var scrollyleft = main.select('#scrollyleft');
+		var figure = scrolly.select('figure');
+		var article = scrolly.select('article');
+		var step = article.selectAll('.step');
+		// initialize the scrollama
+		var scroller = scrollama();
+    var scrollerleft = scrollama();
+    var firstscroller = scrollama();
+    var emojiscroller = scrollama();
+    var hatscroller = scrollama();
+    var options = {
+  // If high is specified then the axis will display values explicitly up to this value and the computed maximum from the data is ignored
+  high: 100,
+  // If low is specified then the axis will display values explicitly down to this value and the computed minimum from the data is ignored
+  low: 0,
+  // This option will be used when finding the right scale division settings. The amount of ticks on the scale will be determined so that as many ticks as possible will be displayed, while not violating this minimum required space (in pixel).
+  scaleMinSpace: 20,
+  // Can be set to true or false. If set to true, the scale will be generated with whole numbers only.
+  onlyInteger: true,
+  // The reference value can be used to make sure that this value will always be on the chart. This is especially useful on bipolar charts where the bipolar center always needs to be part of the chart.
+  referenceValue: 5
+};
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 40, bottom: 40, left: 80},
+    width = 1250 - margin.left - margin.right,
+    height = 650 - margin.top - margin.bottom;
+// append the svg object to the body of the page
+var testing = d3.select("#secondlinechart")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+var slcpositionInfo = document.getElementById('secondlinechart').getBoundingClientRect();
+var slcwidth = slcpositionInfo.width - (margin.left + margin.right);
+var slcheight = slcpositionInfo.height - 200;
+// set the ranges
+var x = d3.scaleLinear().range([0, width-200]);
+var y = d3.scaleLinear().range([height, 0]);
+// define the lines
+var Privatetuitionline = d3.line()
+  .x(function(d) { return x(d.year); })
+  .y(function(d) { return y(d.Private); });
+var Publictuitionline = d3.line()
+  .x(function(d) { return x(d.year); })
+  .y(function(d) { return y(d.Public); });
+var MaxPellGrantline = d3.line()
+  .x(function(d) { return x(d.year); })
+  .y(function(d) { return y(d.MaxPellGrant); });
+var EdApprline = d3.line()
+  .x(function(d) { return x(d.year); })
+  .y(function(d) { return y(d.EdApprPerFTE); });
+var chart2line1 = d3.line()
+  .x(function(d) { return x(d.Year); })
+  .y(function(d) { return y(d.Mortgage); });
+var chart2line2 = d3.line()
+  .x(function(d) { return x(d.Year); })
+  .y(function(d) { return y(d['Credit Card']); });
+var chart2line3 = d3.line()
+  .x(function(d) { return x(d.Year); })
+  .y(function(d) { return y(d.Auto); });
+var chart2line4 = d3.line()
+  .x(function(d) { return x(d.Year); })
+  .y(function(d) { return y(d.Revolving); });
+var chart2line5 = d3.line()
+  .x(function(d) { return x(d.Year); })
+  .y(function(d) { return y(d['Student Loans']); });
+var flc = d3.select("#firstlinechart")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+var slc = d3.select("#secondlinechart")
+.append("svg")
+  .attr("slcwidth", width + margin.left + margin.right)
+  .attr("slcheight", height + margin.top + margin.bottom)
+.append("g")
+  .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+d3.csv("{% static 'articles/Data/tuition.csv' %}", function (error, data) {
+  if (error) throw error;
+  // format data
+  data.forEach(function(d) {
+    d.year = +d.year;
+    d.Private = +d.Private;
+    d.Public = +d.Public
+    d.MaxPellGrant = +d.MaxPellGrant
+    d.EdApprPerFTE = +d.EdApprPerFTE
+  })
+  // Scale the range of the data
+    x.domain([1985, 2020]);
+    y.domain([0, 40000]);
+  // Add the tuitionline path
+    flc.append("path")
+      .data([data])
+      .attr("id","flcpath1")
+      .attr("class", "line")
+      .attr("d", Privatetuitionline)
+      .attr("opacity", 0)
+      .attr("stroke", "#921A00");
+    flc.append("path")
+      .data([data])
+      .attr("id","flcpath2")
+      .attr("class", "line")
+      .attr("d", Publictuitionline)
+      .attr("opacity", 0)
+      .attr("stroke", "#FF8739");
+    flc.append("path")
+      .data([data])
+      .attr("id","flcpath3")
+      .attr("class", "line")
+      .attr("d", MaxPellGrantline)
+      .attr("opacity", 0)
+      .attr("stroke", "#005DA5");
+    flc.append("path")
+      .data([data])
+      .attr("id","flcpath4")
+      .attr("class", "line")
+      .attr("d", EdApprline)
+      .attr("opacity", 0)
+      .attr("stroke", "#51BDFF");
+// Add the X Axis
+   flc.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickPadding([0]).tickFormat(d3.format("d")));
+    // Add the Y Axis
+    flc.append("g")
+        .call(d3.axisLeft(y));
+// Add X Axis Label
+    flc.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top - 10) + ")")
+      .style("text-anchor", "middle")
+      .style("font-size", 15)
+      .text("Year");
+// Add Y Axis Label
+    flc.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 10)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("font-size", 15)
+      .style("text-anchor", "middle")
+      .text("U.S. Dollars (Current Value)");  
+})
+d3.csv("{% static 'articles/Data/delinquency.csv' %}", function (error, data) {
+  if (error) throw error;
+  // format data
+  data.forEach(function(d) {
+    d.Year = +d.Year;
+    d.Mortgage = +d.Mortgage;
+    d.Auto = +d.Auto;
+  })
+  // Scale the range of the data
+    x.domain([2003, 2020]);
+    y.domain([0, 16]);
+  // Add the valueline path
+    slc.append("path")
+      .data([data])
+      .attr("id", "slcpath1")
+      .attr("class", "line")
+      .attr("d", chart2line1)
+      .attr("opacity", 0)
+      .attr("stroke", "#00568A");
+    slc.append("path")
+      .data([data])
+      .attr("id", "slcpath2")
+      .attr("class", "line")
+      .attr("d", chart2line2)
+      .attr("opacity", 0)
+      .attr("stroke", "#B977DA");
+    slc.append("path")
+      .data([data])
+      .attr("id", "slcpath3")
+      .attr("class", "line")
+      .attr("d", chart2line3)
+      .attr("opacity", 0)
+      .attr("stroke", "#50A77E");
+    slc.append("path")
+      .data([data])
+      .attr("id", "slcpath4")
+      .attr("class", "line")
+      .attr("d", chart2line4)
+      .attr("opacity", 0)
+      .attr("stroke", "#00A6FF");
+    slc.append("path")
+      .data([data])
+      .attr("id", "slcpath5")
+      .attr("class", "line")
+      .attr("d", chart2line5)
+      .attr("opacity", 0)
+      .attr("stroke", "red");
+// Add the X Axis
+    slc.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+    // Add the Y Axis
+    slc.append("g")
+        .call(d3.axisLeft(y));
+  // Add X Axis Label
+  slc.append("text")             
+        .attr("transform",
+              "translate(" + (width/2) + " ," + 
+                            (height + margin.top ) + ")")
+        .style("text-anchor", "middle")
+        .style("font-size", 15)
+        .text("Year");
+  // Add Y Axis Label
+      slc.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left + 30)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-size", 15)
+        .text("Default Rate (%)");  
+})
+    $(document).ready(function(){
+	$('#nav').localScroll(800);
+	//.parallax(xPosition, speedFactor, outerHeight) options:
+	//xPosition - Horizontal position of the element
+	//inertia - speed to move relative to vertical scroll. Example: 0.1 is one tenth the speed of scrolling, 2 is twice the speed of scrolling
+	//outerHeight (true/false) - Whether or not jQuery should use it's outerHeight option to determine when a section is in the viewport
+	$('#intro').parallax("50%", 0.1);
+	$('#second').parallax("50%", 0.1);
+  $('#third').parallax("50%", 0.3);
+  $('#fourth').parallax("50%", 0.2);
+})
+    
+    function flc1() {
+      
+      document.getElementById("flcpath1").style.opacity=0     
+      document.getElementById("flcpath2").style.opacity=0
+      document.getElementById("flcpath3").style.opacity=0
+      document.getElementById("flcpath4").style.opacity=0
+      document.getElementById("slcpath1").style.opacity=0  
+      document.getElementById("slcpath2").style.opacity=0
+      document.getElementById("slcpath3").style.opacity=0     
+      document.getElementById("slcpath4").style.opacity=0
+      document.getElementById("slcpath5").style.opacity=0
+    }
+    function flc2() {
+      
+    }
+    function flc3() {
+      var mtn = document.getElementById("Money Mountain")
+      var bckgrd = document.getElementById("Mountain Road")
+      var flc = document.getElementById("firstlinechart")
+      
+      document.getElementById("flcLegend").style.opacity="1"
+      TweenMax.to(mtn, 1, {scale:0.01});
+      TweenMax.to(mtn, 1, {y:-620});
+      TweenMax.to(mtn, 1, {x:410});
+      TweenMax.to(bckgrd, 2, {opacity:0});
+      TweenMax.to(mtn, 2, {opacity:0, delay:.4});
+      document.getElementById("flcpath1").style.opacity=1
+      document.getElementById("flcpath2").style.opacity=1
+      document.getElementById("flcpath1").classList.add("path-animate")
+      document.getElementById("flcpath2").classList.add("path-animate")
+      TweenMax.to(flc, 2, {opacity:1}); 
+    }
+    function flc4() {
+      
+    }
+    function flc5() {
+      var flcsvg = d3.select("#flcLegend")
+      document.getElementById("flcpath3").style.opacity=1
+      document.getElementById("flcpath3").classList.add("path-animate")
+      flcsvg.append("circle").attr("cx",20).attr("cy",43).attr("r", 6).style("fill", "#005DA5")
+      flcsvg.append("text").attr("x", 30).attr("y", 43).text("Max Pell Grant").style("font-size", "15px").attr("alignment-baseline","middle")
+    }
+    function flc7() {
+      var flcsvg = d3.select("#flcLegend")
+      document.getElementById("flcpath4").style.opacity=1
+      document.getElementById("flcpath4").classList.add("path-animate")
+      flcsvg.append("circle").attr("cx",20).attr("cy",58).attr("r", 6).style("fill", "#51BDFF")
+      flcsvg.append("text").attr("x", 30).attr("y", 58).text("Gov Spending per FTE").style("font-size", "15px").attr("alignment-baseline","middle")
+    }
+    function slc1() {
+      
+      document.getElementById("slcLegend").style.opacity="1"
+      document.getElementById("slcpath1").style.opacity=1 
+      document.getElementById("slcpath1").classList.add("path-animate")
+      document.getElementById("secondlinechart").style.opacity=1
+      document.getElementById("Money Mountain").style.opacity=0
+      document.getElementById("Mountain Road").style.opacity=0
+    }
+    function slc2() {
+      var slcsvg = d3.select("#slcLegend")
+      slcsvg.append("circle").attr("cx",20).attr("cy",28).attr("r", 6).style("fill", "#B977DA")
+      slcsvg.append("text").attr("x", 30).attr("y", 28).text("Credit Cards").style("font-size", "15px").attr("alignment-baseline","middle")
+      document.getElementById("slcpath2").style.opacity=1
+      document.getElementById("slcpath2").classList.add("path-animate")
+    }
+    function slc3() {
+      var slcsvg = d3.select("#slcLegend")
+      slcsvg.append("circle").attr("cx",20).attr("cy",43).attr("r", 6).style("fill", "#50A77E")
+      slcsvg.append("text").attr("x", 30).attr("y", 43).text("Automobile").style("font-size", "15px").attr("alignment-baseline","middle")
+      slcsvg.append("circle").attr("cx",20).attr("cy",58).attr("r", 6).style("fill", "#00A6FF")
+      slcsvg.append("text").attr("x", 30).attr("y", 58).text("Revolving Debt").style("font-size", "15px").attr("alignment-baseline","middle")
+      document.getElementById("slcpath3").style.opacity=1
+      document.getElementById("slcpath3").classList.add("path-animate")
+      document.getElementById("slcpath4").style.opacity=1
+      document.getElementById("slcpath4").classList.add("path-animate")
+}
+    function slc4() {
+      var slcsvg = d3.select("#slcLegend")
+      slcsvg.append("circle").attr("cx",20).attr("cy",73).attr("r", 6).style("fill", "red")
+      slcsvg.append("text").attr("x", 30).attr("y", 73).text("Student Loans").style("font-size", "15px").attr("alignment-baseline","middle")
+      TweenMax.to(document.getElementById("slcpath1"), 1, {opacity:.25});
+      TweenMax.to(document.getElementById("slcpath2"), 1, {opacity:.25});
+      TweenMax.to(document.getElementById("slcpath3"), 1, {opacity:.25});
+      TweenMax.to(document.getElementById("slcpath4"), 1, {opacity:.25});
+      document.getElementById("slcpath5").style.opacity=1
+      document.getElementById("slcpath5").classList.add("path-animate")
+    }
+    function makemountain() {
+      document.getElementById("secondlinechart").style.opacity=0
+      document.getElementById("path1").style.opacity = 0
+      document.getElementById("path1").classList.add("path-animate");
+      document.getElementById("Money Mountain").style.opacity=1
+      document.getElementById("Mountain Road").style.opacity=1
+    }
+    function emoji1() {
+      var fish = document.getElementById("fish")
+      var tomato = document.getElementById("tomato")
+      var baby = document.getElementById("baby")
+      document.getElementById("smile1").style.opacity = "0"
+      document.getElementById("frown1").style.opacity = "1"
+      TweenMax.to(frown1, 1, {y:300, ease: Bounce.easeOut});
+      
+      baby.style.opacity = "1";
+      document.getElementById("retire").style.opacity = "0";
+      document.getElementById("worker").style.opacity = "0";
+      document.getElementById("house").style.opacity = "0";
+    }
+    function emoji2() {
+      document.getElementById("smile2").style.opacity = "0"
+      document.getElementById("frown2").style.opacity = "1"
+      TweenMax.to(frown2, 1, {y:300, ease: Bounce.easeOut});
+      document.getElementById("baby").style.opacity = "0";
+      document.getElementById("retire").style.opacity = "0";
+      document.getElementById("worker").style.opacity = "1";
+      document.getElementById("house").style.opacity = "0";
+    }
+    function emoji3() {
+      document.getElementById("smile3").style.opacity = "0"
+      document.getElementById("frown3").style.opacity = "1"
+      TweenMax.to(frown3, 1, {y:300, ease: Bounce.easeOut});
+      document.getElementById("baby").style.opacity = "0";
+      document.getElementById("retire").style.opacity = "1";
+      document.getElementById("house").style.opacity = "0";
+      document.getElementById("worker").style.opacity = "0";
+    }
+    
+    function emoji4() {
+      document.getElementById("smile4").style.opacity = "0"
+      document.getElementById("frown4").style.opacity = "1"
+      document.getElementById("smile5").style.opacity = "0"
+      document.getElementById("frown5").style.opacity = "1"
+      TweenMax.to(frown4, 1, {y:300, ease: Bounce.easeOut});
+      TweenMax.to(frown5, 1, {y:300, ease: Bounce.easeOut});
+      document.getElementById("baby").style.opacity = "0";
+      document.getElementById("retire").style.opacity = "0";
+      document.getElementById("worker").style.opacity = "0";
+      document.getElementById("house").style.opacity = "1";
+}
+    function bubble1() {
+      document.getElementById("ClusterLegend").style.opacity="0"
+      //bubble1
+  }
+    function bubble2() {
+      simulation.restart();
+      document.getElementById("ClusterLegend").style.opacity="1"
+      document.getElementById("SchoolTypeLegend").style.opacity="0"
+      var color = d3.scaleOrdinal(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3"]);
+      var x = d3.scaleOrdinal()
+        .domain([1, 2, 3, 4, 5])
+        .range([3*width/10, 4*width/10,5*width/10,6*width/10,7*width/10])
+      d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return color(d.cluster); })
+        
+      simulation
+      .alpha(.5)
+      .force("forceX", d3.forceX().strength(.4).x(function(d){ return x(d.cluster) }))
+      .force("forceY", d3.forceY().strength(.25).y(height * .5))
+      .force("charge", d3.forceManyBody().strength(-6))
+      .force("collide", d3.forceCollide().strength(1).radius(function(d){ return 4; }).iterations(1))
+      setTimeout(function(){ simulation.stop(); }, 3000)
+  }
+  function bubble3() {
+  document.getElementById("ClusterLegend").style.opacity="0"
+  simulation.stop()
+  d3.select("#bubblechart").selectAll("circle").attr("fill", "#838383").attr("opacity", .1)
+  var Wisconsin = ["University of Wisconsin-Madison"]
+  d3.select("#bubblechart").selectAll("circle")
+    .filter(function(d) {
+      return Wisconsin.indexOf(d["Institution Name"]) > -1;
+   })
+    .style("opacity", .9)
+    .style("fill", "#c5050c")
+    
+}
+function bubble4() {
+  var Northwestern = ["Northwestern University"]
+d3.select("#bubblechart").selectAll("circle")
+  .filter(function(d) {
+    return Northwestern.indexOf(d["Institution Name"]) > -1;
+ })
+  .style("opacity", .9)
+  .style("fill", "#4E2A84")
+  simulation.stop()
+  
+}
+function bubble5() {
+var IvyLeague = ["Harvard University", "Yale University", "Cornell University", "Princeton University", "Dartmouth College", "Columbia University in the City of New York", "Brown University", "University of Pennsylvania"]
+d3.select("#bubblechart").selectAll("circle")
+  .filter(function(d) {
+    return IvyLeague.indexOf(d["Institution Name"]) > -1;
+ })
+  .style("opacity", .9)
+  .style("fill", "#EE95F1")
+  
+  simulation.stop()
+}
+function bubble6() {
+  simulation.restart()
+var Illinois = ["IL"]
+d3.select("#bubblechart").selectAll("circle")
+  .filter(function(d) {
+    return Illinois.indexOf(d["State abbreviation (HD2016)"]) > -1;
+ })
+  .style("opacity", .9)
+  .style("fill", "#63B878")
+  simulation.stop()
+  
+}
+function bubble7(){
+  simulation.restart()
+document.getElementById("ClusterLegend").style.opacity="1"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="0"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+  var ResetSchools = ["University of Wisconsin-Madison", "Northwestern University", "Harvard University", "Yale University", "Cornell University", "Princeton University", "Dartmouth College", "Columbia University in the City of New York", "Brown University", "University of Pennsylvania"]
+  d3.select("#bubblechart").selectAll("circle")
+    .filter(function(d) {
+      return ResetSchools.indexOf(d["Institution Name"]) > -1;
+   })
+    .style("fill", "")
+  var ResetState = ["IL"]
+  d3.select("#bubblechart").selectAll("circle")
+    .filter(function(d) {
+      return ResetState.indexOf(d["State abbreviation (HD2016)"]) > -1;
+   })
+    .style("fill", "")
+  var color = d3.scaleOrdinal(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3"]);
+  d3.select("#bubblechart").selectAll("circle").attr("opacity", .9)
+  d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return color(d.cluster); })
+  simulation.stop()
+}
+function bubble8() {
+document.getElementById("ClusterLegend").style.opacity="1"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="1"
+document.getElementById("my_dataviz2").style.opacity="0"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+  simulation.restart()
+  d3.select("#bubblechart").selectAll("circle").attr("r", function(d){
+      d.size = +d.UGDS / 3500;
+      d.size < 2 ? d.radius = 2 : d.radius = d.size;
+      return d.radius;
+    })
+    var x = d3.scaleOrdinal()
+        .domain([1, 2, 3, 4, 5])
+        .range([3*width/10, 4*width/10,5*width/10,6*width/10,7*width/10])
+    simulation
+      .alpha(.1)
+      .force("forceX", d3.forceX().strength(.4).x(function(d){ return x(d.cluster) }))
+      .force("forceY", d3.forceY().strength(.3).y(height * .5))
+      .force("charge", d3.forceManyBody().strength(-7))
+      .force("collide", d3.forceCollide().strength(1).radius(function(d){
+      +d.UGDS / 3500;
+      d.size < 2 ? d.radius = 2 : d.radius = d.size;
+      return d.radius;
+    }).iterations(1))
+    setTimeout(function(){ simulation.stop(); }, 1500)
+    
+}
+function bubble9(){
+  
+document.getElementById("ClusterLegend").style.opacity="1"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+  d3.select("#bubblechart").selectAll("circle").attr("r", function(d){
+      d.size = +d.GRAD_DEBT_MDN_SUPP / 6000;
+      d.size < 2 ? d.radius = 2 : d.radius = d.size;
+      return d.radius;
+    })
+    var x = d3.scaleOrdinal()
+        .domain([1, 2, 3, 4, 5])
+        .range([3*width/10, 4*width/10,5*width/10,6*width/10,7*width/10])
+    simulation.restart()
+    simulation
+      .alpha(.2)
+      .force("forceX", d3.forceX().strength(.4).x(function(d){ return x(d.cluster) }))
+      .force("forceY", d3.forceY().strength(.3).y(height * .5))
+      .force("charge", d3.forceManyBody().strength(-8))
+      .force("collide", d3.forceCollide().strength(.5).radius(function(d){
+      d.size = +d.GRAD_DEBT_MDN_SUPP / 6000;
+      d.size < 2 ? d.radius = 2 : d.radius = d.size;
+      return d.radius;
+    }).iterations(1))
+    setTimeout(function(){ simulation.stop(); }, 1500)
+}
+function bubble10() { 
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="1"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+  var color = d3.scaleOrdinal(["#34B4B2", "#F19145","#F1D678"]);
+  d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return color(+d["CONTROL"]); })
+  }
+  function bubble11() {
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="1"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+    var colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0,.3])
+    d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return colorScale(+d['CDR3']); })
+  }
+  function bubble12() { 
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="1"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+  var colorScale = d3.scaleSequential(d3.interpolateGreens).domain([0,40000])
+  d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return colorScale(+d['Average amount of federal  state  local or institutional grant aid awarded (SFA1516)']); })
+}
+function bubble13() { 
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="1"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+var colorScale = d3.scaleSequential(d3.interpolateGreens).domain([0,100000])
+d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return colorScale(+d['MD_EARN_WNE_P10']); })
+}
+function bubble14() { 
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="1"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+var colorScale = d3.scaleLinear().domain([0,1]).range(["pink", "blue"])
+d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return colorScale(+d.UGDS_MEN); })
+}
+function bubble15() { 
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="1"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="1"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+var colorScale = d3.scaleSequential(d3.interpolateGreys).domain([0,1])
+d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return colorScale(+d.UGDS_BLACK); })
+}
+$( ".size" ).change(function() {
+document.getElementById("my_dataviz").style.opacity="0"
+document.getElementById("my_dataviz2").style.opacity="0"
+document.getElementById("my_dataviz3").style.opacity="0"
+document.getElementById("my_dataviz4").style.opacity="0"
+document.getElementById("my_dataviz5").style.opacity="0"
+document.getElementById("my_dataviz6").style.opacity="0"
+var bubblesize = $("select.size option:selected").text()
+if (bubblesize == "Number of Undergrads"){bubblesize = "UGDS"; factor = 3500; document.getElementById("my_dataviz").style.opacity="1"}
+else if (bubblesize == "Net Cost"){bubblesize = "net cost"; factor = 5000; document.getElementById("my_dataviz3").style.opacity="1"}
+else if (bubblesize == "Avg Debt"){bubblesize = "GRAD_DEBT_MDN_SUPP"; factor = 5000; document.getElementById("my_dataviz2").style.opacity="1"}
+else if (bubblesize == "Average Aid Provided"){bubblesize = "Average amount of federal  state  local or institutional grant aid awarded (SFA1516)"; factor = 4000; document.getElementById("my_dataviz5").style.opacity="1"}
+else if (bubblesize == "Average Loans Taken Out"){bubblesize = "Average amount of federal student loans awarded to full-time first-time undergraduates (SFA1516)"; factor = 1500; document.getElementById("my_dataviz6").style.opacity="1"}
+else if (bubblesize == "Median Earnings"){bubblesize = "MD_EARN_WNE_P10"; factor = 10000; document.getElementById("my_dataviz4").style.opacity="1"}
+else if (bubblesize == "None"){bubblesize = "None"};
+if (bubblesize == "None"){
+  d3.select("#bubblechart").selectAll("circle").attr("r", function(d){
+      return 4;
+    })
+  var x = d3.scaleOrdinal()
+    .domain([1, 2, 3, 4, 5])
+    .range([3*width/10, 4*width/10,5*width/10,6*width/10,7*width/10])
+  simulation
+    .alpha(.1)
+    .force("forceX", d3.forceX().strength(.4).x(function(d){ return x(d.cluster) }))
+    .force("forceY", d3.forceY().strength(.3).y(height * .5))
+    .force("charge", d3.forceManyBody().strength(-9))
+    .force("collide", d3.forceCollide().strength(.8).radius(function(d){
+    return 4;
+  }).iterations(1))
+  simulation.restart()
+  setTimeout(function(){ simulation.stop(); }, 1500)
+}
+else {
+  d3.select("#bubblechart").selectAll("circle").attr("r", function(d){
+      d.size = +d[bubblesize] / factor;
+      d.size < 2 ? d.radius = 2 : d.radius = d.size;
+      return d.radius;
+    })
+  var x = d3.scaleOrdinal()
+    .domain([1, 2, 3, 4, 5])
+    .range([3*width/10, 4*width/10,5*width/10,6*width/10,7*width/10])
+  simulation
+    .alpha(.1)
+    .force("forceX", d3.forceX().strength(.4).x(function(d){ return x(d.cluster) }))
+    .force("forceY", d3.forceY().strength(.3).y(height * .5))
+    .force("charge", d3.forceManyBody().strength(-9))
+    .force("collide", d3.forceCollide().strength(.8).radius(function(d){
+    +d[bubblesize] / factor;
+    d.size < 2 ? d.radius = 2 : d.radius = d.size;
+    return d.radius;
+  }).iterations(1))
+  simulation.restart()
+  setTimeout(function(){ simulation.stop(); }, 1500)
+}
+});
+$( ".color" ).change(function() {
+var colorScale;
+document.getElementById("ClusterLegend").style.opacity="0"
+document.getElementById("SchoolTypeLegend").style.opacity="0"
+document.getElementById("defaultlegend").style.opacity="0"
+document.getElementById("aidlegend").style.opacity="0"
+document.getElementById("earningslegend").style.opacity="0"
+document.getElementById("genderlegend").style.opacity="0"
+document.getElementById("racelegend").style.opacity="0"
+document.getElementById("aidchangelegend").style.opacity="0"
+document.getElementById("netcostlegend").style.opacity="0"
+var bubblecolor = $("select.color option:selected").text()
+if (bubblecolor == "Percent of Male Students"){bubblecolor = "UGDS_MEN"; colorScale = d3.scaleLinear().domain([0,1]).range(["pink", "blue"]); document.getElementById("genderlegend").style.opacity="1"}
+else if (bubblecolor == "Percent of Black Students"){bubblecolor = "UGDS_BLACK"; colorScale = d3.scaleSequential(d3.interpolateGreys).domain([0,1]); document.getElementById("racelegend").style.opacity="1"}
+else if (bubblecolor == "School Type"){bubblecolor = "CONTROL"; colorScale = d3.scaleOrdinal(["#34B4B2", "#F19145","#F1D678"]); document.getElementById("SchoolTypeLegend").style.opacity="1"}
+else if (bubblecolor == "Default Rate"){bubblecolor = "CDR3"; colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0,.3]); document.getElementById("defaultlegend").style.opacity="1"}
+else if (bubblecolor == "Median Earnings"){bubblecolor = "MD_EARN_WNE_P10"; colorScale = d3.scaleSequential(d3.interpolateGreens).domain([0,100000]); document.getElementById("earningslegend").style.opacity="1"}
+else if (bubblecolor == "Change in Grant Aid"){bubblecolor = "Change_in_grant_aid"; colorScale = d3.scaleSequential(d3.interpolatePiYG).domain([-10000,10000]); document.getElementById("aidchangelegend").style.opacity="1"}
+else if (bubblecolor == "Net Cost"){bubblecolor = "net cost"; colorScale = d3.scaleSequential(d3.interpolateReds).domain([0,50000]); document.getElementById("netcostlegend").style.opacity="1"}
+else if (bubblecolor == "None"){bubblecolor = "None"; d3.select("#bubblechart").selectAll("circle").attr("fill", "#65E5DC")};
+
+d3.select("#bubblechart").selectAll("circle").attr("fill", function(d) { return colorScale(+d[bubblecolor]); })
+});
+function hat(){
+  document.getElementById("gradhat").style.opacity="1"
+  document.getElementById("gradhat").classList.add("path-hat")
+}
+    // scrollama event handlers
+		function handleStepEnter(response) {
+      if(response.element.id == 'step-flc1') {flc1()} 
+      if(response.element.id == 'step-flc2') {flc2()} 
+      if(response.element.id == 'step-flc3') {flc3()} 
+      if(response.element.id == 'step-flc4') {flc4()} 
+      if(response.element.id == 'step-flc5') {flc5()}
+      if(response.element.id == 'step-flc7') {flc7()}  
+      if(response.element.id == 'step-slc1') {slc1()} 
+      if(response.element.id == 'step-slc2') {slc2()} 
+      if(response.element.id == 'step-slc3') {slc3()} 
+      if(response.element.id == 'step-slc4') {slc4()} 
+      if(response.element.id == 'step-emoji1') {emoji1()} 
+      if(response.element.id == 'step-emoji2') {emoji2()} 
+      if(response.element.id == 'step-emoji3') {emoji3()} 
+      if(response.element.id == 'step-emoji4') {emoji4()} 
+      if(response.element.id == 'step-bubble1') {bubble1()} 
+      if(response.element.id == 'step-bubble2') {bubble2()} 
+      if(response.element.id == 'step-bubble3') {bubble3()} 
+      if(response.element.id == 'step-bubble4') {bubble4()}
+      if(response.element.id == 'step-bubble5') {bubble5()} 
+      if(response.element.id == 'step-bubble6') {bubble6()}
+      if(response.element.id == 'step-bubble7') {bubble7()} 
+      if(response.element.id == 'step-bubble8') {bubble8()}
+      if(response.element.id == 'step-bubble9') {bubble9()} 
+      if(response.element.id == 'step-bubble10') {bubble10()}
+      if(response.element.id == 'step-bubble11') {bubble11()} 
+      if(response.element.id == 'step-bubble12') {bubble12()} 
+      if(response.element.id == 'step-bubble13') {bubble13()} 
+      if(response.element.id == 'step-bubble14') {bubble14()} 
+      if(response.element.id == 'step-bubble15') {bubble15()}
+      if(response.element.id == 'step-hat') {hat()} 
+    }
+    function handleResize() {
+			// 1. update height of step elements
+			var stepH = Math.floor(window.innerHeight * 0.25);
+			step.style('height', stepH + 'px');
+			var figureHeight = window.innerHeight / 2
+			var figureMarginTop = (window.innerHeight - figureHeight) / 2  
+			figure
+				.style('height', figureHeight + 'px')
+				.style('top', figureMarginTop + 'px');
+			// 3. tell scrollama to update new element dimensions
+			scroller.resize();
+		}
+    function setupStickyfill() {
+			d3.selectAll('.sticky').each(function () {
+				Stickyfill.add(this);
+			});
+		}
+    function init() {
+			setupStickyfill();
+			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+			handleResize();
+			// 2. setup the scroller passing options
+			// 		this will also initialize trigger observations
+			// 3. bind scrollama event handlers (this can be chained like below)
+      scroller.setup({
+				step: '#scrolly article .step',
+				offset: 0.5,
+				debug: false,
+			})
+        .onStepEnter(handleStepEnter)
+        firstscroller.setup({
+				step: '#firstscrolly article .step',
+				offset: 0.5,
+				debug: false,
+			})
+        .onStepEnter(handleStepEnter)
+      scrollerleft.setup({
+				step: '#scrollyleft article .step',
+        offset: 0.5,
+				debug: false,
+			})
+        .onStepEnter(handleStepEnter)
+        scroller.setup({
+				step: '#bubblescrolly article .step',
+        offset: 0.5,
+        progress: true,
+				debug: false,
+			})
+				.onStepEnter(handleStepEnter)
+        emojiscroller.setup({
+				step: '#emojiscrolly article .step',
+        offset: 0.5,
+        progress: true,
+				debug: false,
+			})
+				.onStepEnter(handleStepEnter)
+        hatscroller.setup({
+				step: '#hatscrolly article .step',
+        offset: 0.5,
+        progress: true,
+				debug: false,
+			})
+				.onStepEnter(handleStepEnter)
+			// setup resize event
+			window.addEventListener('resize', handleResize, {passive: true});
+    }
+    // append the svg object to the body of the page
+var legendheight = 60
+var legendwidth = 150
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("padding", "0")
+    .attr("width", legendwidth)
+    .attr("height", legendheight)
+// The scale you use for bubble size
+var size = d3.scaleSqrt()
+  .domain([1, 175000])  // What's in the data, let's say it is percentage
+  .range([1, 25])  // Size in pixel
+// Add legend: circles
+var valuesToShow = [5000, 100000]
+var xCircle = 40
+var xLabel = 80
+var yCircle = 60
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("circle")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - size(d) } )
+    .attr("r", function(d){ return size(d) })
+    .style("fill", "none")
+    .attr("stroke", "black")
+// Add legend: segments
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + size(d) } )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - size(d) } )
+    .attr('y2', function(d){ return yCircle - size(d) } )
+    .attr('stroke', 'black')
+    .style('stroke-dasharray', ('2,2'))
+// Add legend: labels
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - size(d) } )
+    .text( function(d){ return d } )
+    .style("font-size", 10)
+    .attr('alignment-baseline', 'middle')
+// append the svg object to the body of the page
+var legendheight = 60
+var legendwidth = 150
+var svg = d3.select("#my_dataviz2")
+  .append("svg")
+    .attr("padding", "0")
+    .attr("width", legendwidth)
+    .attr("height", legendheight)
+// The scale you use for bubble size
+var size = d3.scaleSqrt()
+  .domain([1, 120000])  // What's in the data, let's say it is percentage
+  .range([1, 10])  // Size in pixel
+// Add legend: circles
+var valuesToShow = [1000, 80000]
+var xCircle = 60
+var xLabel = 80
+var yCircle = 50
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("circle")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - size(d) } )
+    .attr("r", function(d){ return size(d) })
+    .style("fill", "none")
+    .attr("stroke", "black")
+// Add legend: segments
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + size(d) } )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - size(d) } )
+    .attr('y2', function(d){ return yCircle - size(d) } )
+    .attr('stroke', 'black')
+    .style('stroke-dasharray', ('2,2'))
+// Add legend: labels
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - size(d) } )
+    .text( function(d){ return d } )
+    .style("font-size", 10)
+    .attr('alignment-baseline', 'middle')
+    // append the svg object to the body of the page
+var legendheight = 60
+var legendwidth = 150
+var svg = d3.select("#my_dataviz3")
+  .append("svg")
+    .attr("padding", "0")
+    .attr("width", legendwidth)
+    .attr("height", legendheight)
+// The scale you use for bubble size
+var size = d3.scaleSqrt()
+  .domain([1, 50000])  // What's in the data, let's say it is percentage
+  .range([1, 10])  // Size in pixel
+// Add legend: circles
+var valuesToShow = [1000, 40000]
+var xCircle = 60
+var xLabel = 80
+var yCircle = 50
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("circle")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - size(d) } )
+    .attr("r", function(d){ return size(d) })
+    .style("fill", "none")
+    .attr("stroke", "black")
+// Add legend: segments
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + size(d) } )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - size(d) } )
+    .attr('y2', function(d){ return yCircle - size(d) } )
+    .attr('stroke', 'black')
+    .style('stroke-dasharray', ('2,2'))
+// Add legend: labels
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - size(d) } )
+    .text( function(d){ return d } )
+    .style("font-size", 10)
+    .attr('alignment-baseline', 'middle')
+// append the svg object to the body of the page
+var legendheight = 60
+var legendwidth = 150
+var svg = d3.select("#my_dataviz4")
+  .append("svg")
+    .attr("padding", "0")
+    .attr("width", legendwidth)
+    .attr("height", legendheight)
+// The scale you use for bubble size
+var size = d3.scaleSqrt()
+  .domain([1, 120000])  // What's in the data, let's say it is percentage
+  .range([1, 12])  // Size in pixel
+// Add legend: circles
+var valuesToShow = [1000, 100000]
+var xCircle = 60
+var xLabel = 80
+var yCircle = 50
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("circle")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - size(d) } )
+    .attr("r", function(d){ return size(d) })
+    .style("fill", "none")
+    .attr("stroke", "black")
+// Add legend: segments
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + size(d) } )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - size(d) } )
+    .attr('y2', function(d){ return yCircle - size(d) } )
+    .attr('stroke', 'black')
+    .style('stroke-dasharray', ('2,2'))
+// Add legend: labels
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - size(d) } )
+    .text( function(d){ return d } )
+    .style("font-size", 10)
+    .attr('alignment-baseline', 'middle')
+    // append the svg object to the body of the page
+var legendheight = 60
+var legendwidth = 150
+var svg = d3.select("#my_dataviz5")
+  .append("svg")
+    .attr("padding", "0")
+    .attr("width", legendwidth)
+    .attr("height", legendheight)
+// The scale you use for bubble size
+var size = d3.scaleSqrt()
+  .domain([1, 50000])  // What's in the data, let's say it is percentage
+  .range([1, 12])  // Size in pixel
+// Add legend: circles
+var valuesToShow = [1000, 40000]
+var xCircle = 60
+var xLabel = 80
+var yCircle = 50
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("circle")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - size(d) } )
+    .attr("r", function(d){ return size(d) })
+    .style("fill", "none")
+    .attr("stroke", "black")
+// Add legend: segments
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + size(d) } )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - size(d) } )
+    .attr('y2', function(d){ return yCircle - size(d) } )
+    .attr('stroke', 'black')
+    .style('stroke-dasharray', ('2,2'))
+// Add legend: labels
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - size(d) } )
+    .text( function(d){ return d } )
+    .style("font-size", 10)
+    .attr('alignment-baseline', 'middle')
+        // append the svg object to the body of the page
+var legendheight = 60
+var legendwidth = 150
+var svg = d3.select("#my_dataviz6")
+  .append("svg")
+    .attr("padding", "0")
+    .attr("width", legendwidth)
+    .attr("height", legendheight)
+// The scale you use for bubble size
+var size = d3.scaleSqrt()
+  .domain([1, 16000])  // What's in the data, let's say it is percentage
+  .range([1, 11])  // Size in pixel
+// Add legend: circles
+var valuesToShow = [1000, 15000]
+var xCircle = 60
+var xLabel = 80
+var yCircle = 50
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("circle")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - size(d) } )
+    .attr("r", function(d){ return size(d) })
+    .style("fill", "none")
+    .attr("stroke", "black")
+// Add legend: segments
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + size(d) } )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - size(d) } )
+    .attr('y2', function(d){ return yCircle - size(d) } )
+    .attr('stroke', 'black')
+    .style('stroke-dasharray', ('2,2'))
+// Add legend: labels
+svg
+  .selectAll("legend")
+  .data(valuesToShow)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - size(d) } )
+    .text( function(d){ return d } )
+    .style("font-size", 10)
+    .attr('alignment-baseline', 'middle')
+    var w = 300, h = 100;
+    var key1 = d3.select("#defaultlegend")
+    .append("svg")
+    .attr("width", w+82)
+    .attr("height", 105)
+    .attr("padding", "0")
+    ;
+    key1.append("text").attr("x", 5).attr("y", 30).text("Default Rate Within Three Years of Graduation (%)").style("font-size", "15px").attr("alignment-baseline","left")
+    var defaultlegend = key1.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient1")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    defaultlegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#FFF8BC")
+      .attr("stop-opacity", 1);
+    defaultlegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#FEA547")
+      .attr("stop-opacity", 1);
+    defaultlegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#D61320")
+      .attr("stop-opacity", 1);
+    defaultlegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#800026")
+      .attr("stop-opacity", 1);
+    key1.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient1)")
+      .attr("transform", "translate(5,10)");
+    var y1 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([35, 0]);
+    var yAxis1 = d3.axisBottom()
+      .scale(y1)
+      .ticks(5);
+    key1.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(5,45)")
+      .call(yAxis1)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("axis title");
+      var key2 = d3.select("#aidlegend")
+      .append("svg")
+      .attr("width", w+82)
+      .attr("height", 105)
+      .attr("padding", "0")
+      ;
+      key2.append("text").attr("x", 5).attr("y", 30).text("Amount of Aid Awarded ($1,000s)").style("font-size", "15px").attr("alignment-baseline","left")
+    var aidlegend = key2.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient2")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    aidlegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#F7FCF5")
+      .attr("stop-opacity", 1);
+    aidlegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#93D290")
+      .attr("stop-opacity", 1);
+    aidlegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#147E3A")
+      .attr("stop-opacity", 1);
+    aidlegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#004400")
+      .attr("stop-opacity", 1);
+    key2.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient2)")
+      .attr("transform", "translate(5,10)");
+    var y2 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([40, 0]);
+    var yAxis2 = d3.axisBottom()
+      .scale(y2)
+      .ticks(5);
+    key2.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(5,45)")
+      .call(yAxis2)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("axis title");
+      
+    var key3 = d3.select("#earningslegend")
+      .append("svg")
+      .attr("width", w+82)
+      .attr("height", 105)
+      .attr("padding", "0");
+    key3.append("text").attr("x", 5).attr("y", 30).text("Median Earnings Post-Graduation ($1,000s)").style("font-size", "15px").attr("alignment-baseline","left")
+    var earningslegend = key3.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient3")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    earningslegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#F7FCF5")
+      .attr("stop-opacity", 1);
+    earningslegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#93D290")
+      .attr("stop-opacity", 1);
+    earningslegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#147E3A")
+      .attr("stop-opacity", 1);
+    earningslegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#004400")
+      .attr("stop-opacity", 1);
+    key3.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient3)")
+      .attr("transform", "translate(5,10)");
+    var y3 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([120, 0]);
+    var yAxis3 = d3.axisBottom()
+      .scale(y3)
+      .ticks(5);
+    key3.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(5,45)")
+      .call(yAxis3)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("axis title");
+    var key4 = d3.select("#genderlegend")
+      .append("svg")
+      .attr("width", w+82)
+      .attr("height", 105)
+      .attr("padding", "0");
+    key4.append("text").attr("x", 5).attr("y", 30).text("Percent of Male Students").style("font-size", "15px").attr("alignment-baseline","left")
+    var genderlegend = key4.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient4")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    genderlegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#ffc0cb")
+      .attr("stop-opacity", 1);
+    genderlegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#a77ddd")
+      .attr("stop-opacity", 1);
+    genderlegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#533fee")
+      .attr("stop-opacity", 1);
+    genderlegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#0000ff")
+      .attr("stop-opacity", 1);
+    key4.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient4)")
+      .attr("transform", "translate(5,10)");
+    var y4 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([100, 0]);
+    var yAxis4 = d3.axisBottom()
+      .scale(y4)
+      .ticks(5);
+    key4.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(5,45)")
+      .call(yAxis4)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("axis title");
+    var key5 = d3.select("#racelegend")
+    .append("svg")
+    .attr("width", w+82)
+    .attr("height", 105)
+    .attr("padding", "0");
+    key5.append("text").attr("x", 5).attr("y", 30).text("Percent of Black Students").style("font-size", "15px").attr("alignment-baseline","left")
+    var racelegend= key5.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient5")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    racelegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#fafafa")
+      .attr("stop-opacity", 1);
+    racelegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#c4c4c4")
+      .attr("stop-opacity", 1);
+    racelegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#6d6d6d")
+      .attr("stop-opacity", 1);
+    racelegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#000000")
+      .attr("stop-opacity", 1);
+    key5.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient5)")
+      .attr("transform", "translate(5,10)");
+    var y5 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([100, 0]);
+    var yAxis5 = d3.axisBottom()
+      .scale(y5)
+      .ticks(5);
+    key5.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(5,45)")
+    .call(yAxis5)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("axis title");
+    var key6 = d3.select("#aidchangelegend")
+    .append("svg")
+    .attr("width", w+82)
+    .attr("height", 105)
+    .attr("padding", "0");
+    key6.append("text").attr("x", 5).attr("y", 30).text("Change in Grant Aid Per Student Since Recession").style("font-size", "15px").attr("alignment-baseline","left")
+    var aidchangelegend= key6.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient6")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    aidchangelegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#B41670")
+      .attr("stop-opacity", 1);
+    aidchangelegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#F3BCDC")
+      .attr("stop-opacity", 1);
+    aidchangelegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#BFE394")
+      .attr("stop-opacity", 1);
+    aidchangelegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#276419")
+      .attr("stop-opacity", 1);
+    key6.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient6)")
+      .attr("transform", "translate(19,10)");
+    var y6 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([10000, -10000]);
+    var yAxis6 = d3.axisBottom()
+      .scale(y6)
+      .ticks(5);
+    key6.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(19,45)")
+    .call(yAxis6)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("axis title");
+    var key7 = d3.select("#netcostlegend")
+    .append("svg")
+    .attr("width", w+82)
+    .attr("height", 105)
+    .attr("padding", "0");
+    key7.append("text").attr("x", 5).attr("y", 30).text("Net Cost").style("font-size", "15px").attr("alignment-baseline","left")
+    var netcostlegend= key7.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient7")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+    netcostlegend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#FFF5F0")
+      .attr("stop-opacity", 1);
+    netcostlegend.append("stop")
+      .attr("offset", "33%")
+      .attr("stop-color", "#FCA082")
+      .attr("stop-opacity", 1);
+    netcostlegend.append("stop")
+      .attr("offset", "66%")
+      .attr("stop-color", "#E7362B")
+      .attr("stop-opacity", 1);
+    netcostlegend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#67000D")
+      .attr("stop-opacity", 1);
+    key7.append("rect")
+      .attr("width", w)
+      .attr("height", h - 90)
+      .attr("y",25)
+      .style("fill", "url(#gradient7)")
+      .attr("transform", "translate(5,10)");
+    var y7 = d3.scaleLinear()
+      .range([300, 0])
+      .domain([50000, 0]);
+    var yAxis7 = d3.axisBottom()
+      .scale(y7)
+      .ticks(5);
+    key7.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(5,45)")
+    .call(yAxis7)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("axis title");
+    
+    
+    var mydataviz = d3.select("#my_dataviz")
+    mydataviz.append("text").attr("x", 20).attr("y", 15).text("Number of Undergrads").style("font-size", "15px").attr("alignment-baseline","middle")
+    var mydataviz2 = d3.select("#my_dataviz2")
+    mydataviz2.append("text").attr("x", 20).attr("y", 15).text("Average Debt ($)").style("font-size", "15px").attr("alignment-baseline","middle")
+    var mydataviz3 = d3.select("#my_dataviz3")
+    mydataviz3.append("text").attr("x", 20).attr("y", 15).text("Net Cost").style("font-size", "15px").attr("alignment-baseline","middle")
+    var mydataviz4 = d3.select("#my_dataviz4")
+    mydataviz4.append("text").attr("x", 20).attr("y", 15).text("Median Earnings").style("font-size", "15px").attr("alignment-baseline","middle")
+    var mydataviz5 = d3.select("#my_dataviz5")
+    mydataviz5.append("text").attr("x", 20).attr("y", 15).text("Average Aid Provided").style("font-size", "15px").attr("alignment-baseline","middle")
+    var mydataviz6 = d3.select("#my_dataviz6")
+    mydataviz6.append("text").attr("x", 20).attr("y", 15).text("Average Loans Taken Out").style("font-size", "15px").attr("alignment-baseline","middle")
+    // select the svg area
+    var SchoolTypesvg = d3.select("#SchoolTypeLegend")
+    // Handmade legend
+    SchoolTypesvg.append("circle").attr("cx",20).attr("cy",13).attr("r", 6).style("fill", "#F19145")
+    SchoolTypesvg.append("circle").attr("cx",20).attr("cy",28).attr("r", 6).style("fill", "#34B4B2")
+    SchoolTypesvg.append("circle").attr("cx",20).attr("cy",43).attr("r", 6).style("fill", "#F1D678")
+    SchoolTypesvg.append("text").attr("x", 30).attr("y", 13).text("Public").style("font-size", "15px").attr("alignment-baseline","middle")
+    SchoolTypesvg.append("text").attr("x", 30).attr("y", 28).text("Private Non Profit").style("font-size", "15px").attr("alignment-baseline","middle")
+    SchoolTypesvg.append("text").attr("x", 30).attr("y", 43).text("Private For Profit").style("font-size", "15px").attr("alignment-baseline","middle")
+    // select the svg area
+    var Clustersvg = d3.select("#ClusterLegend")
+    // Handmade legend
+    Clustersvg.append("circle").attr("cx",20).attr("cy",13).attr("r", 6).style("fill", "#8da0cb")
+    Clustersvg.append("circle").attr("cx",20).attr("cy",28).attr("r", 6).style("fill", "#a6d854")
+    Clustersvg.append("circle").attr("cx",20).attr("cy",43).attr("r", 6).style("fill", "#fc8d62")
+    Clustersvg.append("circle").attr("cx",20).attr("cy",58).attr("r", 6).style("fill", "#e78ac3")
+    Clustersvg.append("circle").attr("cx",20).attr("cy",73).attr("r", 6).style("fill", "#66c2a5")
+    Clustersvg.append("text").attr("x", 30).attr("y", 13).text("Cluster 1 - Trade Schools").style("font-size", "15px").attr("alignment-baseline","middle")
+    Clustersvg.append("text").attr("x", 30).attr("y", 28).text("Cluster 2 - Mid-level Regional Schools").style("font-size", "15px").attr("alignment-baseline","middle")
+    Clustersvg.append("text").attr("x", 30).attr("y", 43).text("Cluster 3 - Elite Universities").style("font-size", "15px").attr("alignment-baseline","middle")
+    Clustersvg.append("text").attr("x", 30).attr("y", 58).text("Cluster 4 - High Risk Schools").style("font-size", "15px").attr("alignment-baseline","middle")
+    Clustersvg.append("text").attr("x", 30).attr("y", 73).text("Cluster 5 - Large Public Colleges").style("font-size", "15px").attr("alignment-baseline","middle")
+    // select the svg area
+    var tsneClustersvg = d3.select("#tsneClusterLegend")
+    // Handmade legend
+    tsneClustersvg.append("rect").attr("x",18).attr("y",6).attr("width", 10).attr("height", 10).style("fill", "#8da0cb")
+    tsneClustersvg.append("rect").attr("x",18).attr("y",21).attr("width", 10).attr("height", 10).style("fill", "#a6d854")
+    tsneClustersvg.append("rect").attr("x",18).attr("y",36).attr("width", 10).attr("height", 10).style("fill", "#fc8d62")
+    tsneClustersvg.append("rect").attr("x",18).attr("y",51).attr("width", 10).attr("height", 10).style("fill", "#e78ac3")
+    tsneClustersvg.append("rect").attr("x",18).attr("y",66).attr("width", 10).attr("height", 10).style("fill", "#66c2a5")
+    tsneClustersvg.append("text").attr("x", 30).attr("y", 13).text("Cluster 1 - Trade Schools").style("font-size", "15px").attr("alignment-baseline","middle")
+    tsneClustersvg.append("text").attr("x", 30).attr("y", 28).text("Cluster 2 - Mid-level Regional Schools").style("font-size", "15px").attr("alignment-baseline","middle")
+    tsneClustersvg.append("text").attr("x", 30).attr("y", 43).text("Cluster 3 - Elite Universities").style("font-size", "15px").attr("alignment-baseline","middle")
+    tsneClustersvg.append("text").attr("x", 30).attr("y", 58).text("Cluster 4 - High Risk Schools").style("font-size", "15px").attr("alignment-baseline","middle")
+    tsneClustersvg.append("text").attr("x", 30).attr("y", 73).text("Cluster 5 - Large Public Colleges").style("font-size", "15px").attr("alignment-baseline","middle")
+    // select the svg area
+    var flcsvg = d3.select("#flcLegend")
+    // Handmade legend
+    flcsvg.append("circle").attr("cx",20).attr("cy",13).attr("r", 6).style("fill", "#921A00")
+    flcsvg.append("circle").attr("cx",20).attr("cy",28).attr("r", 6).style("fill", "#FF8739")
+    flcsvg.append("text").attr("x", 30).attr("y", 13).text("Avg Private School Tuition").style("font-size", "15px").attr("alignment-baseline","middle")
+    flcsvg.append("text").attr("x", 30).attr("y", 28).text("Avg Public School Tuition").style("font-size", "15px").attr("alignment-baseline","middle")
+    
+    // select the svg area
+    var slcsvg = d3.select("#slcLegend")
+    // Handmade legend
+    slcsvg.append("circle").attr("cx",20).attr("cy",13).attr("r", 6).style("fill", "#00568A")
+    slcsvg.append("text").attr("x", 30).attr("y", 13).text("Mortgages").style("font-size", "15px").attr("alignment-baseline","middle")
+    
+    var bubblewidth = width+100, bubbleheight = height;
+    var svg = d3.select("#bubblechart").append("svg").attr("width", bubblewidth).attr("height", bubbleheight);
+ 
+var color = d3.scaleOrdinal(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3"]);
+var simulation = d3.forceSimulation()
+        .force("forceX", d3.forceX().strength(.12).x(bubblewidth * .5))
+        .force("forceY", d3.forceY().strength(.12).y(bubbleheight * .75))
+        // .force("center", d3.forceCenter().x(bubblewidth * .5).y(bubbleheight * .5))
+        .force("charge", d3.forceManyBody().strength(-2));
+// Define the div for the tooltip
+var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+sizeDivisor = 3000, nodePadding = 1;
+  d3.csv("{% static 'articles/Data/CollegeClusters.csv' %}", types, function (error, data) {
+    if (error) throw error;
+ 
+    simulation
+          .nodes(data)
+          .force("collide", d3.forceCollide().strength(1).radius(function(d){ return 4; }).iterations(1))
+          .force("forceX", d3.forceX().strength(.1).x(width * .5))
+          .force("forceY", d3.forceY().strength(.1).y(height * .5))
+          .alpha(1)
+          .alphaTarget(.8)
+          .on("tick", function(d){
+            node
+                .attr("cx", function(d){ return d.x; })
+                .attr("cy", function(d){ return d.y; })
+          });
+          var node = svg.append("g")
+          .attr("class", "node")
+        .selectAll("circle")
+        .data(data)
+        .enter().append("circle")
+          .attr("r", 4)
+          .attr("fill", "#65E5DC")
+          .attr("cx", function(d){ return d.x; })
+          .attr("cy", function(d){ return d.y; })
+          .on("mouseover", function(d) {	
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div	.html(d["Institution Name"] + "<br/>"  + "Avg Grant Aid: " + +d['Average amount of federal  state  local or institutional grant aid awarded (SFA1516)'] + "<br/>" + "Avg Loans: " + +d["Average amount of federal student loans awarded to full-time first-time undergraduates (SFA1516)"] + "<br/>" + "Number of Undergrads: " + +d["UGDS"] + "<br/>"  + "Median Debt: " + +d["GRAD_DEBT_MDN_SUPP"]+ "<br/>"  + "Median Earnings: " + +d["MD_EARN_WNE_P10"]+ "<br/>"  + "Default Rate: " + +d["CDR3"]+ "<br/>"  + "Net Cost: " + +d["net cost"]+ "<br/>"  + "Proportion of men: " + +d["UGDS_MEN"]+ "<br/>"  + "Proportion of black students: " + +d["UGDS_BLACK"])	
+                .style("left", (d3.event.pageX + 10) + "px")		
+                .style("top", (d3.event.pageY - 80) + "px");	
+            })					
+          .on("mouseout", function(d) {		
+              div.transition()		
+                  .duration(500)		
+                  .style("opacity", 0);	
+          })
+          // .call(d3.drag()
+          //     .on("start", dragstarted)
+          //     .on("drag", dragged)
+          //     .on("end", dragended));
+          
+    });
+
+    setTimeout(function(){ simulation.stop(); }, 6000)
+
+    // function dragstarted(d) {
+    //   if (!d3.event.active) simulation.alphaTarget(.03).restart();
+    //   d.fx = d.x;
+    //   d.fy = d.y;
+    // }
+
+    // function dragged(d) {
+    //   d.fx = d3.event.x;
+    //   d.fy = d3.event.y;
+    // }
+
+    // function dragended(d) {
+    //   if (!d3.event.active) simulation.alphaTarget(.03);
+    //   d.fx = null;
+    //   d.fy = null;
+    // }
+
+    function types(d){
+      d.UGDS = +d.UGDS;
+      d.size = +d.UGDS / sizeDivisor;
+      d.size < 2 ? d.radius = 3 : d.radius = d.size;
+      return d;
+    }
+
+
+    // Load the tsne plot
+
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+  var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+
+  var isMobile = false; //initiate as false
+  // device detection
+  if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
+      || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) { 
+      isMobile = true;
+  }
+
+  if(navigator.userAgent.indexOf("Chrome") == -1 || isMobile == true) {
+  document.getElementById("demo").innerHTML = "It appears you're not using Google Chrome or browsing on your phone. This article is currently only fully supported with the Chrome browser on desktop. Please reopen this page in Chrome on a desktop computer if you're able.";
+  }
+
+		// kick things off
+		init();
+
+  </script>
+
+</body>

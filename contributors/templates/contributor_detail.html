@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<img class="card-img-top" src="{% static contributor.image %}">
+<h1>{{ contributor.name }}</h1>
+<a>{{ contributor.description }}</a>
+{% endblock %}

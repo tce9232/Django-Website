@@ -1,0 +1,210 @@
+<body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+<script>
+
+
+//set up svg
+const svg = d3.select("body")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+            `translate(${margin.left}, ${margin.top})`);
+
+//tooltip
+const tooltip = d3.select("body")
+  .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+const dataFile = "{% static 'articles/Data/actor.csv' %}"
+
+//number of bins for histogram
+const nbins = 120;
+
+//Note: data fetching is done each time the function is ran
+//as d3.csv is replaced by tabletop.js request to get data each time
+//from google spreadsheet
+function update(){
+
+  // Get the data
+  d3.csv(dataFile, function(error, allData) {
+    allData.forEach(function(d) {
+        d.Name = d.Name
+        d.Value = +d.Value
+        d.Race = d.Race;
+    });
+    
+    //simulate new data by randomizing/slicing
+    let data = d3.shuffle(allData)
+    //histogram binning
+    const histogram = d3.histogram()
+      .domain(x.domain())
+      .thresholds(x.ticks(nbins))
+      .value(function(d) { return d.Value;} )
+
+    //binning data and filtering out empty bins
+    const bins = histogram(data).filter(d => d.length>0)
+
+    //g container for each bin
+    let binContainer = svg.selectAll(".gBin")
+      .data(bins);
+
+    binContainer.exit().remove()
+
+    let binContainerEnter = binContainer.enter()
+    .append("g")
+      .attr("class", "gBin")
+      .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+    
+
+      
+    //need to populate the bin containers with data the first time
+    binContainerEnter.selectAll("circle")
+        .data(d => d.map((p, i) => {
+          return {idx: p.Index,
+                  name: p.Name,
+                  value: p.Value,
+                  race: p.Race,
+                  winner: p.Winner,
+                  role: p.Role,
+                  film: p.Film,
+                  radius: 6
+                }
+        }))
+      .enter()
+      .append("circle")
+        .attr("class", function(d) {
+          if (d.winner == "Winner") {
+              return "enter winner"; 
+            }
+            else {
+              return "update"
+            }
+        })
+        .attr("cx", 0) //g element already at correct x pos
+        .attr("cy", function(d) {
+          if (d.race == "White")
+          {
+            return - d.idx * -2 * d.radius + d.radius + 13; 
+          }
+          else {
+            return - d.idx * 2 * d.radius - d.radius;
+          }
+            })
+        
+        .attr("r", 0)
+        .on("mouseover", tooltipOn)
+        .on("mouseout", tooltipOff)
+        .transition()
+          .duration(500)
+          .attr("r", function(d) {
+          return (d.length==0) ? 0 : d.radius; })
+    binContainerEnter.merge(binContainer)
+        .attr("transform", d => `translate(${x(d.x0)}, ${height/2})`)
+    
+    //enter/update/exit for circles, inside each container
+    let dots = binContainer.selectAll("circle")
+        .data(d => d.map((p, i) => {
+          return {idx: i,
+                  name: p.Name,
+                  value: p.Value,
+                  role: p.Role,
+                  film: p.Film,
+                  radius: 6
+                }
+        }))
+
+    
+  });//d3.csv
+};//update
+
+function tooltipOn(d) {
+  //x position of parent g element
+  let gParent = d3.select(this.parentElement)
+  let translateValue = gParent.attr("transform")
+
+  let gX = translateValue.split(",")[0].split("(")[1]
+  let gY = height/2 + (+d3.select(this).attr("cy")-50)
+
+  d3.select(this)
+    .classed("selected", true)
+  tooltip.transition()
+       .duration(200)
+       .style("opacity", .9);
+  tooltip.html(d.name + "<br/> (" + d.value + ")" + "<br/> Role: " + d.role + "<br/>Film: " + d.film)
+    .style("left", gX + "px")
+    .style("top", gY + "px");
+}//tooltipOn
+
+function tooltipOff(d) {
+  d3.select(this)
+      .classed("selected", false);
+    tooltip.transition()
+         .duration(500)
+         .style("opacity", 0);
+}//tooltipOff
+
+// add x axis
+svg.append("g")
+  .attr("class", "axis axis--x")
+  .attr("transform", "translate(0," + height/2 + ")")
+  .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+
+//draw everything
+update();
+
+svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Non-White Actors");
+
+svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top - 20) + ")")
+      .style("text-anchor", "middle")
+      .text("White Actors");
+
+var rectangle = svg.append("rect")
+                    .attr("fill", "black")
+                    .attr("width", width+20)
+                    .attr("height", height/2)
+                    .attr("opacity", .12);
+
+var rectangle = svg.append("rect")
+                    .attr("fill", "black")
+                    .attr("y", height/2)
+                    .attr("width", width+20)
+                    .attr("height", height/2)
+                    .attr("opacity", .06);
+
+// add legend
+
+var ordinal = d3.scaleOrdinal()
+  .domain(["Winner", "Nominee"])
+  .range([ "#EDCA3A", "#1FBAD6"]);
+
+var legend = d3.select("svg");
+
+legend.append("g")
+  .attr("class", "legendOrdinal winner")
+  .attr("transform", "translate(50,30)");
+
+var legendOrdinal = d3.legendColor()
+  .shape("path", d3.symbol().type(d3.symbolCircle).size(100)())
+  .shapePadding(10)
+  .scale(ordinal);
+
+legend.select(".legendOrdinal")
+  .call(legendOrdinal);
+
+</script>
+
+</body>

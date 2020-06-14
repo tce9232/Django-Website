@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+
+<style>
+body {
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    background-color: #fdfdfd;
+}
+
+.head_text {
+    color: white;
+}
+
+.fadedfx {
+  background-color: #fe5652;
+  visibility: hidden;
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+  -webkit-animation-name: fadeIn;
+  animation-duration: 1.5s;
+  -webkit-animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-timing-function: ease-in-out;
+  visibility: visible !important;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>
+
+{% if request.user_agent.is_pc %}
+<body class="grey lighten-2">
+    <div class="w3-row-padding w3-container" style="padding-top: 64px;">
+        <div class="w3-content">
+          <div class="w3-twothird">
+            <h3>Article Archive</h3>
+          </div>
+        </div>
+      </div>
+
+    <div class="container">
+      {% for post in post_list %}
+      <div class="col s12 m7" style="padding-bottom: 40px;">
+  
+        <div class="card horizontal">
+          <div class="card-image">
+            <a href="{% url 'articles:article' pk=post.pk %}" >
+              <img src="{% static post.image %}" class="fadeIn">
+            </a>
+          </div>
+          <div class="card-stacked">
+            <div class="card-content">
+              <a href="{% url 'articles:article' pk=post.pk %}">
+                <span class="card-title">{{ post.title }}</span>
+              </a>
+              <p>{{ post.body }}
+                </p>
+            </div>
+            <div class="card-action">
+              <a href="{% url 'articles:article' pk=post.pk %}" style="float: right;">Read Article</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+</body>
+{% endif %}
+
+{% if not request.user_agent.is_pc %}
+<body class="grey lighten-2">
+    <div class="w3-row-padding w3-container" style="padding-top: 64px;">
+        <div class="w3-content">
+          <div class="w3-twothird">
+            <h3>Article Archive</h3>
+          </div>
+        </div>
+      </div>
+
+    <div class="container">
+      {% for post in post_list %}
+      <div class="col s12 m7" style="padding-bottom: 40px;">
+  
+        <div class="card vertical">
+          <div class="card-image">
+            <a href="{% url 'articles:article' pk=post.pk %}" >
+              <img src="{% static post.image %}" class="fadeIn">
+            </a>
+          </div>
+          <div class="card-stacked">
+            <div class="card-content">
+              <a href="{% url 'articles:article' pk=post.pk %}">
+                <span class="card-title">{{ post.title }}</span>
+              </a>
+              <p>{{ post.body }}
+                </p>
+            </div>
+            <div class="card-action">
+              <a href="{% url 'articles:article' pk=post.pk %}">Read Article</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+</body>
+{% endif %}
+
+
+
+<script>
+
+$(window).scroll(function() {
+		$('.fadedfx').each(function(){
+		var imagePos = $(this).offset().top;
+
+		var topOfWindow = $(window).scrollTop();
+			if (imagePos < topOfWindow+500) {
+				$(this).addClass("fadeIn");
+			}
+		});
+	});
+</script>
+
+
+</html>
+
+{% endblock %}
